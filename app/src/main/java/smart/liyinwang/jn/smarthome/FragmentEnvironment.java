@@ -41,11 +41,9 @@ public class FragmentEnvironment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment Environment.
      */
-    public static FragmentEnvironment newInstance(String param1, String param2) {
+    public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
         FragmentEnvironment fragment = new FragmentEnvironment();
         Bundle args = new Bundle();

@@ -26,8 +26,8 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
 
     private FragmentEnvironment mFragEnvir;
     private FragmentLivingRoom mFragLiving;
-    private FragmentKitchen mFragKitch;
     private FragmentBedroom mFragBed;
+    private FragmentKitchen mFragKitch;
     private FragmentMonitoring mFragMonit;
 
     // list of fragments
@@ -59,16 +59,16 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         mFragList = new ArrayList<Fragment>();
         mFragList.add(mFragEnvir);
         mFragList.add(mFragLiving);
-        mFragList.add(mFragKitch);
         mFragList.add(mFragBed);
+        mFragList.add(mFragKitch);
         mFragList.add(mFragMonit);
 
         // add all fragment titles into array list
         mFragTitleList = new ArrayList<String>();
         mFragTitleList.add("Environment");
         mFragTitleList.add("Living Room");
-        mFragTitleList.add("Kitchen");
         mFragTitleList.add("Bedroom");
+        mFragTitleList.add("Kitchen");
         mFragTitleList.add("Monitoring");
 
         for(String name:mFragTitleList) {

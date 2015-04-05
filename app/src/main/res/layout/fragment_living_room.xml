@@ -1,10 +1,85 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="smart.liyinwang.jn.smarthome.FragmentLivingRoom">
+    tools:context="smart.liyinwang.jn.smarthome.FragmentLivingRoom"
+    >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="Living Room" />
+    <!--<TextView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:text="Living Room" />-->
+
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/channel_minus_button"
+        android:layout_gravity="left|bottom"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="130dp"
+        android:background="@mipmap/left_arrow"/>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/channel_plus_button"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="130dp"
+        android:layout_marginRight="20dp"
+        android:background="#00A2E8"/>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/play_pause_button"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="130dp"
+        android:background="@mipmap/play_pause"/>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/volume_minus_button"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="40dp"
+        android:background="@mipmap/down_arrow"/>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/volume_plus_button"
+        android:layout_gravity="center"
+        android:background="@mipmap/up_arrow"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:id="@+id/imageView"
+        android:layout_gravity="left|top"
+        android:src="@mipmap/snowflake"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="20dp"/>
+
+    <SeekBar
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:id="@+id/living_room_temperature_control_bar"
+        android:layout_gravity="center|right|top"
+        android:layout_marginTop="130dp"
+        android:layout_marginRight="20dp"
+        android:max="13"
+        android:indeterminate="false"
+        android:progress="1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25 ℃"
+        android:id="@+id/living_room_temperature_text_view"
+        android:layout_gravity="center_horizontal|top"
+        android:textSize="56dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="50dp"
+        android:textColor="#4597BF"/>
 
 </FrameLayout>
