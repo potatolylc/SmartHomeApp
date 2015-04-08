@@ -1,10 +1,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/environment"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context="smart.liyinwang.jn.smarthome.FragmentEnvironment">
+    tools:context="smart.liyinwang.jn.smarthome.monitor.FragmentEnvironment">
 
     <ImageView
-        android:id="@+id/temperature_imageView"
+        android:id="@+id/environment_temperature_imageView"
         android:layout_width="fill_parent"
         android:layout_height="162dp"
         android:layout_gravity="right|top"
@@ -13,7 +13,7 @@
         android:src="@drawable/temperature_line"/>
 
     <ImageView
-        android:id="@+id/humidity_imageView"
+        android:id="@+id/environment_humidity_imageView"
         android:layout_width="fill_parent"
         android:layout_height="113dp"
         android:layout_gravity="left|bottom"
@@ -21,39 +21,39 @@
         android:src="@drawable/humidity_line"/>
 
     <ImageView
-        android:id="@+id/brightness_imageView"
+        android:id="@+id/environment_brightness_imageView"
         android:layout_width="fill_parent"
         android:layout_height="135dp"
         android:layout_gravity="left|center_vertical"
         android:src="@drawable/brightness_line"/>
 
     <TextView
-        android:id="@+id/brightness_textView"
+        android:id="@+id/environment_brightness_textView"
         android:layout_width="152dp"
         android:layout_height="113dp"
         android:gravity="bottom"
         android:layout_gravity="right|center_vertical"
-        android:text="120"
+        android:text="0"
         android:textColor="#94BD15"
         android:textSize="50dp"/>
 
     <TextView
-        android:id="@+id/humidity_textView"
+        android:id="@+id/environment_humidity_textView"
         android:layout_width="175dp"
         android:layout_height="155dp"
         android:gravity="top"
         android:layout_gravity="right|bottom"
-        android:text="40"
+        android:text="0"
         android:textColor="#00A2E8"
         android:textSize="50dp" />
 
     <TextView
-        android:id="@+id/temperature_textView"
+        android:id="@+id/environment_temperature_textView"
         android:layout_width="230dp"
         android:layout_height="149dp"
         android:gravity="bottom"
         android:layout_gravity="right|top"
-        android:text="30"
+        android:text="0"
         android:textColor="#A349A4"
         android:textSize="50dp"/>
 

@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="smart.liyinwang.jn.smarthome.FragmentLivingRoom"
+    tools:context="smart.liyinwang.jn.smarthome.room.FragmentLivingRoom"
     >
 
     <!-- TODO: Update blank fragment layout -->
@@ -25,7 +25,7 @@
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="130dp"
         android:layout_marginRight="20dp"
-        android:background="#00A2E8"/>
+        android:background="@mipmap/right_arrow"/>
 
     <ImageButton
         android:layout_width="100dp"
@@ -69,7 +69,9 @@
         android:layout_marginRight="20dp"
         android:max="13"
         android:indeterminate="false"
-        android:progress="1"/>
+        android:progress="1"
+        android:progressTint="#4597BF"
+        android:thumbTint="#4597BF"/>
 
     <TextView
         android:layout_width="wrap_content"

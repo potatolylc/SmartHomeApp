@@ -1,4 +1,4 @@
-package smart.liyinwang.jn.smarthome;
+package smart.liyinwang.jn.smarthome.core;
 
 /**
  * Created by ajou on 2015-03-04.
@@ -10,13 +10,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
+import smart.liyinwang.jn.smarthome.R;
+import smart.liyinwang.jn.smarthome.monitor.FragmentEnvironment;
+import smart.liyinwang.jn.smarthome.monitor.FragmentMonitoring;
+import smart.liyinwang.jn.smarthome.room.FragmentBedroom;
+import smart.liyinwang.jn.smarthome.room.FragmentKitchen;
+import smart.liyinwang.jn.smarthome.room.FragmentLivingRoom;
 
 public class MainActivity extends ActionBarActivity implements MaterialTabListener {
 

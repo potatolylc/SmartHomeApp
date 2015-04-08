@@ -1,7 +1,6 @@
-package smart.liyinwang.jn.smarthome;
+package smart.liyinwang.jn.smarthome.monitor;
 
 import android.app.Activity;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,38 +10,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import model.Environment;
+import service.EnvironmentService;
+import service.EnvironmentServiceImpl;
+import smart.liyinwang.jn.smarthome.R;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentEnvironment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentEnvironment#newInstance} factory method to
- * create an instance of this fragment.
+ * Environment Fragment:
+ * Showing temperature, brightness and humidity values
+ * which are retrieved from database.
  */
 public class FragmentEnvironment extends Fragment {
     private OnFragmentInteractionListener mListener;
+    private EnvironmentService mEnvironmentService;
+    private Environment mEnvironment;
 
     // image views
     private ImageView mTempImageView;
     private ImageView mBrightImageView;
     private ImageView mHumidityImageView;
 
-    // edit texts
+    // text views
     private TextView mTempTextView;
     private TextView mBrightTextView;
     private TextView mHumidityTextView;
 
+
     private View mMainView;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment Environment.
-     */
     public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
         FragmentEnvironment fragment = new FragmentEnvironment();
@@ -52,7 +49,6 @@ public class FragmentEnvironment extends Fragment {
     }
 
     public FragmentEnvironment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -65,20 +61,15 @@ public class FragmentEnvironment extends Fragment {
         mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup)getActivity().findViewById(R.id.pager), false);
 
         // init ImageView
-        mTempImageView = (ImageView)mMainView.findViewById(R.id.temperature_imageView);
-        mTempImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Clicked...", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mBrightImageView = (ImageView)mMainView.findViewById(R.id.brightness_imageView);
-        mHumidityImageView = (ImageView)mMainView.findViewById(R.id.humidity_imageView);
+        mTempImageView = (ImageView)mMainView.findViewById(R.id.environment_temperature_imageView);
+        mBrightImageView = (ImageView)mMainView.findViewById(R.id.environment_brightness_imageView);
+        mHumidityImageView = (ImageView)mMainView.findViewById(R.id.environment_humidity_imageView);
 
-        // init editText
-        mTempTextView = (TextView)mMainView.findViewById(R.id.temperature_textView);
-        mBrightTextView = (TextView)mMainView.findViewById(R.id.brightness_textView);
-        mHumidityTextView = (TextView)mMainView.findViewById(R.id.humidity_textView);
+        // init textView
+        mTempTextView = (TextView)mMainView.findViewById(R.id.environment_temperature_textView);
+        mBrightTextView = (TextView)mMainView.findViewById(R.id.environment_brightness_textView);
+        mHumidityTextView = (TextView)mMainView.findViewById(R.id.environment_humidity_textView);
+
     }
 
     @Override
@@ -91,6 +82,16 @@ public class FragmentEnvironment extends Fragment {
             vp.removeAllViewsInLayout();
             Log.d("EnvironmentFragment log", "--> All views removed");
         }
+
+        mEnvironmentService = new EnvironmentServiceImpl();
+        mEnvironment = mEnvironmentService.monitorEnvironment("1");
+        System.out.println("------------->" + mEnvironment);
+        if(mEnvironment != null) {
+            mTempTextView.setText(mEnvironment.getTemperature());
+            mBrightTextView.setText(mEnvironment.getLightBrightness());
+            mHumidityTextView.setText(mEnvironment.getHumidity());
+        }
+
         return inflater.inflate(R.layout.fragment_environment, container, false);
     }
 

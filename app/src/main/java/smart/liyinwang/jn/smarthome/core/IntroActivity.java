@@ -1,4 +1,4 @@
-package smart.liyinwang.jn.smarthome;
+package smart.liyinwang.jn.smarthome.core;
 
 /**
  * Created by ajou on 2015-03-04.
@@ -6,17 +6,14 @@ package smart.liyinwang.jn.smarthome;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
+import smart.liyinwang.jn.smarthome.R;
+import smart.liyinwang.jn.smarthome.user.LoginActivity;
 
 public class IntroActivity extends Activity {
 
@@ -83,7 +80,7 @@ public class IntroActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
