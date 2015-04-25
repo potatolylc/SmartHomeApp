@@ -15,6 +15,7 @@ import model.Environment;
 import service.EnvironmentService;
 import service.EnvironmentServiceImpl;
 import smart.liyinwang.jn.smarthome.R;
+import utils.Utils;
 
 
 /**
@@ -23,7 +24,6 @@ import smart.liyinwang.jn.smarthome.R;
  * which are retrieved from database.
  */
 public class FragmentEnvironment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private EnvironmentService mEnvironmentService;
     private Environment mEnvironment;
 
@@ -37,11 +37,11 @@ public class FragmentEnvironment extends Fragment {
     private TextView mBrightTextView;
     private TextView mHumidityTextView;
 
-
     private View mMainView;
 
     public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
+
         FragmentEnvironment fragment = new FragmentEnvironment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -53,8 +53,9 @@ public class FragmentEnvironment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         Log.d("EnvironmentFragment log", "--> onCreate()");
+
+        super.onCreate(savedInstanceState);
 
         // fragment inflation
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -69,87 +70,65 @@ public class FragmentEnvironment extends Fragment {
         mTempTextView = (TextView)mMainView.findViewById(R.id.environment_temperature_textView);
         mBrightTextView = (TextView)mMainView.findViewById(R.id.environment_brightness_textView);
         mHumidityTextView = (TextView)mMainView.findViewById(R.id.environment_humidity_textView);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         Log.d("EnvironmentFragment log", "--> onCreateView()");
+
+        // Inflate the layout for this fragment
         ViewGroup vp = (ViewGroup)mMainView.getParent();
         if(vp != null) {
             vp.removeAllViewsInLayout();
             Log.d("EnvironmentFragment log", "--> All views removed");
         }
-
-        mEnvironmentService = new EnvironmentServiceImpl();
-        mEnvironment = mEnvironmentService.monitorEnvironment("1");
-        System.out.println("------------->" + mEnvironment);
-        if(mEnvironment != null) {
-            mTempTextView.setText(mEnvironment.getTemperature());
-            mBrightTextView.setText(mEnvironment.getLightBrightness());
-            mHumidityTextView.setText(mEnvironment.getHumidity());
-        }
-
         return inflater.inflate(R.layout.fragment_environment, container, false);
     }
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
         Log.d("EnvironmentFragment log", "--> onAttach()");
-        /*try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+
+        super.onAttach(activity);
+
+        mEnvironmentService = new EnvironmentServiceImpl();
+        mEnvironment = mEnvironmentService.getEnvironmentData(Utils.DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM);
+        System.out.println("------------->" + mEnvironment);
+        /*if(mEnvironment != null) {
+            mTempTextView.setText(mEnvironment.getTemperature());
+            mBrightTextView.setText(mEnvironment.getLightBrightness());
+            mHumidityTextView.setText(mEnvironment.getHumidity());
         }*/
     }
 
     @Override
     public void onDetach() {
-        super.onDetach();
         Log.d("EnvironmentFragment log", "--> onDetach()");
-        mListener = null;
+        super.onDetach();
     }
 
     @Override
     public void onStart() {
-        super.onStart();
         Log.d("EnvironmentFragment log", "--> onStart()");
+        super.onStart();
     }
 
     @Override
     public void onResume() {
-        super.onResume();
         Log.d("EnvironmentFragment log", "--> onResume()");
+        super.onResume();
     }
 
     @Override
     public void onPause() {
-        super.onPause();
         Log.d("EnvironmentFragment log", "--> onPause()");
+        super.onPause();
     }
 
     @Override
     public void onStop() {
-        super.onStop();
         Log.d("EnvironmentFragment log", "--> onStop()");
+        super.onStop();
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
-    }
-
 }

@@ -54,11 +54,11 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         tabHost = (MaterialTabHost) this.findViewById(R.id.tabHost);
 
         // init fragments
-        mFragEnvir = new FragmentEnvironment();
-        mFragLiving = new FragmentLivingRoom();
-        mFragKitch = new FragmentKitchen();
-        mFragBed = new FragmentBedroom();
-        mFragMonit = new FragmentMonitoring();
+        mFragEnvir = FragmentEnvironment.newInstance();
+        mFragLiving = FragmentLivingRoom.newInstance();
+        mFragKitch = FragmentKitchen.newInstance();
+        mFragBed = FragmentBedroom.newInstance();
+        mFragMonit = FragmentMonitoring.newInstance();
 
         // add all fragments into array list
         mFragList = new ArrayList<Fragment>();
@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         }
 
         // init view pager
-        pager = (ViewPager) this.findViewById(R.id.pager );
+        pager = (ViewPager) this.findViewById(R.id.pager);
 
         // init view pager
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -104,7 +104,6 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
             );
 
         }
-
     }
 
 

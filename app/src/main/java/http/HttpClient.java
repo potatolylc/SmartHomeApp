@@ -11,41 +11,38 @@ import java.util.Map;
  */
 public class HttpClient {
     private static AsyncHttpClient client;
-    private static AsyncHttpClient getClient() {
+    private HttpClient() {
+    }
+    public static AsyncHttpClient getClient() {
         if(client == null) {
             client = new AsyncHttpClient();
         }
+        setHeaders();
         return client;
     }
 
-    public static void get(String uri, Map<String, String> headers, RequestParams params, AsyncHttpResponseHandler handler) {
-        setHeaders(headers);
+    public static void get(String uri, RequestParams params, ResponseHandler handler) {
         client.get(uri, params, handler);
     }
 
-    public static void post(String uri, Map<String, String> headers, RequestParams params, AsyncHttpResponseHandler handler) {
-        setHeaders(headers);
+    public static void post(String uri, RequestParams params, ResponseHandler handler) {
         client.post(uri, params, handler);
     }
 
-    public static void put(String uri, Map<String, String> headers, RequestParams params, AsyncHttpResponseHandler handler) {
-        setHeaders(headers);
+    public static void put(String uri, RequestParams params, ResponseHandler handler) {
         client.put(uri, params, handler);
     }
 
-    public static void delete(String uri, Map<String, String> headers, RequestParams params, AsyncHttpResponseHandler handler) {
-        setHeaders(headers);
+    public static void delete(String uri, RequestParams params, ResponseHandler handler) {
         client.delete(null, uri, null, params, handler);
     }
 
-    private static void setHeaders(Map<String, String> headers) {
-        if(headers == null){
+    private static void setHeaders() {
+        if(client == null){
             return;
         }
-
-        for(Map.Entry<String, String> entry : headers.entrySet()) {
-            getClient().addHeader(entry.getKey(), entry.getValue());
-        }
+        client.addHeader("Accept", "application/json");
+        client.addHeader("Content-type", "application/json");
     }
 
 }

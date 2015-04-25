@@ -1,3 +1,4 @@
+/*
 package smart.liyinwang.jn.smarthome.monitor;
 
 import android.app.Activity;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import model.Environment;
 import model.SensorData;
 import service.MonitoringService;
 import service.MonitoringServiceImpl;
@@ -18,27 +18,29 @@ import smart.liyinwang.jn.smarthome.R;
 import utils.Utils;
 
 
+*/
 /**
  * Monitoring Fragment:
  * Showing graph of temperature and brightness
  * of the past one hour.
- */
-public class FragmentMonitoring extends Fragment {
+ *//*
+
+public class FragmentMonitoringBackup extends Fragment {
     private MonitoringService mMonitoringService;
     List<SensorData> sensorDataList;
 
     private View mMainView;
 
-    public static FragmentMonitoring newInstance() {
+    public static FragmentMonitoringBackup newInstance() {
         Log.d("MonitoringFragment log", "--> new Instance()");
 
-        FragmentMonitoring fragment = new FragmentMonitoring();
+        FragmentMonitoringBackup fragment = new FragmentMonitoringBackup();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FragmentMonitoring() {
+    public FragmentMonitoringBackup() {
     }
 
     @Override
@@ -73,8 +75,8 @@ public class FragmentMonitoring extends Fragment {
         mMonitoringService = new MonitoringServiceImpl();
         sensorDataList =
                 mMonitoringService.getMonitoringDataList(
-                Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
-                Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
+                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
+                        Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
     }
 
     @Override
@@ -109,3 +111,4 @@ public class FragmentMonitoring extends Fragment {
         super.onStop();
     }
 }
+*/
