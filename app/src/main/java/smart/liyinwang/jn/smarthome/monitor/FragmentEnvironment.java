@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import model.Environment;
 import service.EnvironmentService;
+import service.EnvironmentServiceImpl;
 import smart.liyinwang.jn.smarthome.R;
+import utils.Utils;
 
 
 /**
@@ -21,8 +23,6 @@ import smart.liyinwang.jn.smarthome.R;
  * which are retrieved from database.
  */
 public class FragmentEnvironment extends Fragment {
-    private EnvironmentService mEnvironmentService;
-    private Environment mEnvironment;
 
     // image views
     private ImageView mTempImageView;
@@ -34,7 +34,12 @@ public class FragmentEnvironment extends Fragment {
     private TextView mBrightTextView;
     private TextView mHumidityTextView;
 
+    // main view
     private View mMainView;
+
+    // service and model object for loading data
+    private EnvironmentService mEnvironmentService;
+    private Environment mEnvironment;
 
     public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
@@ -47,21 +52,41 @@ public class FragmentEnvironment extends Fragment {
 
     public FragmentEnvironment() {}
 
+    public void loadData() {
+        mEnvironmentService = new EnvironmentServiceImpl();
+        mEnvironment = new Environment();
+        mEnvironment = mEnvironmentService.getEnvironmentData(Utils.DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("EnvironmentFragment log", "--> onCreate()");
 
         super.onCreate(savedInstanceState);
 
+        // init view
+        initMainView();
+        initImageView();
+        initTextView();
+
+        // load data from server
+        loadData();
+    }
+
+    public void initMainView() {
         // main view inflation
         LayoutInflater inflater = getActivity().getLayoutInflater();
         mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup)getActivity().findViewById(R.id.pager), false);
+    }
 
+    public void initImageView() {
         // init ImageView
         mTempImageView = (ImageView)mMainView.findViewById(R.id.environment_temperature_imageView);
         mBrightImageView = (ImageView)mMainView.findViewById(R.id.environment_brightness_imageView);
         mHumidityImageView = (ImageView)mMainView.findViewById(R.id.environment_humidity_imageView);
+    }
 
+    public void initTextView() {
         // init textView
         mTempTextView = (TextView)mMainView.findViewById(R.id.environment_temperature_textView);
         mBrightTextView = (TextView)mMainView.findViewById(R.id.environment_brightness_textView);
@@ -123,7 +148,7 @@ public class FragmentEnvironment extends Fragment {
         Log.d("EnvironmentFragment log", "--> setUserVisibleHint()");
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()) {
-            System.out.println("Data list size --> ");
+            System.out.println("Data --> " + mEnvironment);
         }
     }
 }

@@ -8,9 +8,10 @@
         android:text="Monitoring" />-->
 
     <lecho.lib.hellocharts.view.ComboLineColumnChartView
-        android:id="@+id/monitoring_chart"
-        android:layout_width="match_parent"
+        android:id="@+id/monitoring_temperature_chart"
+        android:layout_width="360dp"
         android:layout_height="200dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"/>
 
 </FrameLayout>

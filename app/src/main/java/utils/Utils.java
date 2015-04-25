@@ -13,6 +13,6 @@ public interface Utils {
     public static final String DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_HUMIDITY = "5538ae965ace012fc8c64f8d";
 
     // Dummy start time and end time for showing data graph (used for Monitoring Fragment) for test
-    public static final String DUMMY_START_TIME = "2015/04/25 08:00:00";
-    public static final String DUMMY_END_TIME = "2015/04/25 08:30:00";
+    public static final String DUMMY_START_TIME = "2015/04/25 12:50:00";
+    public static final String DUMMY_END_TIME = "2015/04/25 13:10:00";
 }

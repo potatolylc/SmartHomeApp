@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="basic_color">#009688</color>
+    <color name="grass_green_color">#CEF279</color>
+    <color name="green_color">#6B9900</color>
+    <color name="light_blue_color">#B2EBF4</color>
+    <color name="sky_blue_color">#3DB7CC</color>
+    <color name="deep_green_color">#1A3E00</color>
+    <color name="light_grey_color">#BDBDBD</color>
+    <color name="grey_color">#4C4C4C</color>
 </resources>
