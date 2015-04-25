@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import http.HttpClient;
@@ -40,7 +39,13 @@ public class MonitoringServiceImpl implements MonitoringService {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                List<SensorData> sensorDataList = sensorData.buildList(response);
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+                        sensorDataList.add(SensorData.build((JSONObject) response.get(i)));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

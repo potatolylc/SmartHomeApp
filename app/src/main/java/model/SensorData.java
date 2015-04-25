@@ -25,26 +25,25 @@ public class SensorData {
         this.sensorDataTimestamp = sensorDataTimestamp;
     }
 
-    public SensorData build(JSONObject response) {
+    public static SensorData build(JSONObject response) {
+        SensorData sensorData = new SensorData();
         try {
-            this.setSensorDataSerialNum((int) response.get("sensorDataSerialNum"));
-            this.setSensorDataValue(response.get("sensorDataValue"));
-            this.setSensorDataTimestamp((Date) new Date((String) response.get("sensorDataTimestamp")));
+            sensorData.setSensorDataSerialNum((int) response.get("sensorDataSerialNum"));
+            sensorData.setSensorDataValue(response.get("sensorDataValue"));
+            sensorData.setSensorDataTimestamp((Date) new Date((String) response.get("sensorDataTimestamp")));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return this;
+        return sensorData;
     }
 
-    public List<SensorData> buildList(JSONArray response) {
+    public static List<SensorData> buildList(JSONArray response) {
         List<SensorData> sensorDataList = new ArrayList<SensorData>();
         try {
             for(int i = 0; i < response.length(); i++) {
                 JSONObject jsonObj = (JSONObject)response.get(i);
-                this.setSensorDataSerialNum((int)jsonObj.get("sensorDataSerialNum"));
-                this.setSensorDataValue(jsonObj.get("sensorDataValue"));
-                this.setSensorDataTimestamp((Date)new Date((String)jsonObj.get("sensorDataTimestamp")));
-                sensorDataList.add(this);
+                SensorData sensorData = build(jsonObj);
+                sensorDataList.add(sensorData);
             }
         } catch (JSONException e) {
             e.printStackTrace();
