@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         mFragTitleList.add("Kitchen");
         mFragTitleList.add("Monitoring");
 
-        for(String name:mFragTitleList) {
+        for(String name : mFragTitleList) {
             System.out.println(name);
         }
 
@@ -91,7 +91,6 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
             public void onPageSelected(int position) {
                 // when user do a swipe the selected tab change
                 tabHost.setSelectedNavigationItem(position);
-
             }
         });
 
@@ -109,7 +108,6 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
 
     @Override
     public void onTabSelected(MaterialTab tab) {
-        // System.out.println(tab.getPosition());
         pager.setCurrentItem(tab.getPosition());
     }
 

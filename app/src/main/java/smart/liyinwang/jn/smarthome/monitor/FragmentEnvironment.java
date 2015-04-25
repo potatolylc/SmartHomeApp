@@ -1,7 +1,6 @@
 package smart.liyinwang.jn.smarthome.monitor;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,9 +12,7 @@ import android.widget.TextView;
 
 import model.Environment;
 import service.EnvironmentService;
-import service.EnvironmentServiceImpl;
 import smart.liyinwang.jn.smarthome.R;
-import utils.Utils;
 
 
 /**
@@ -41,15 +38,14 @@ public class FragmentEnvironment extends Fragment {
 
     public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
-
         FragmentEnvironment fragment = new FragmentEnvironment();
+
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FragmentEnvironment() {
-    }
+    public FragmentEnvironment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +53,7 @@ public class FragmentEnvironment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        // fragment inflation
+        // main view inflation
         LayoutInflater inflater = getActivity().getLayoutInflater();
         mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup)getActivity().findViewById(R.id.pager), false);
 
@@ -89,17 +85,7 @@ public class FragmentEnvironment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         Log.d("EnvironmentFragment log", "--> onAttach()");
-
         super.onAttach(activity);
-
-        mEnvironmentService = new EnvironmentServiceImpl();
-        mEnvironment = mEnvironmentService.getEnvironmentData(Utils.DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM);
-        System.out.println("------------->" + mEnvironment);
-        /*if(mEnvironment != null) {
-            mTempTextView.setText(mEnvironment.getTemperature());
-            mBrightTextView.setText(mEnvironment.getLightBrightness());
-            mHumidityTextView.setText(mEnvironment.getHumidity());
-        }*/
     }
 
     @Override
@@ -130,5 +116,14 @@ public class FragmentEnvironment extends Fragment {
     public void onStop() {
         Log.d("EnvironmentFragment log", "--> onStop()");
         super.onStop();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.d("EnvironmentFragment log", "--> setUserVisibleHint()");
+        super.setUserVisibleHint(isVisibleToUser);
+        if(getUserVisibleHint()) {
+            System.out.println("Data list size --> ");
+        }
     }
 }

@@ -48,7 +48,6 @@ public class MonitoringServiceImpl implements MonitoringService {
                 }
             }
         });
-
         return sensorDataList;
     }
 }

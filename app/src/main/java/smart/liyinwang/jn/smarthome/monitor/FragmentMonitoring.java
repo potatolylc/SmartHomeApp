@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import model.Environment;
 import model.SensorData;
 import service.MonitoringService;
 import service.MonitoringServiceImpl;
@@ -31,50 +31,47 @@ public class FragmentMonitoring extends Fragment {
 
     public static FragmentMonitoring newInstance() {
         Log.d("MonitoringFragment log", "--> new Instance()");
-
         FragmentMonitoring fragment = new FragmentMonitoring();
+
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FragmentMonitoring() {
+    public FragmentMonitoring() {}
+
+    public void loadData() {
+        mMonitoringService = new MonitoringServiceImpl();
+        sensorDataList = new ArrayList<SensorData>();
+        sensorDataList =
+        mMonitoringService.getMonitoringDataList(
+                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
+                        Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("MonitoringFragment log", "--> onCreate()");
-
         super.onCreate(savedInstanceState);
-        if(sensorDataList != null) {
-            System.out.println("1~!!!!!!!!!!!! " + sensorDataList.size());
-            for(SensorData data : sensorDataList) {
-                System.out.println(data + "&&&&&&&&&&&&");
-            }
-        }
+
+        // load data from server
+        loadData();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("MonitoringFragment log", "--> onCreateView()");
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_monitoring, container, false);
+        View view = inflater.inflate(R.layout.fragment_monitoring, container, false);
+        return view;
     }
 
 
     @Override
     public void onAttach(Activity activity) {
         Log.d("MonitoringFragment log", "--> onAttach()");
-
         super.onAttach(activity);
-
-        mMonitoringService = new MonitoringServiceImpl();
-        sensorDataList =
-                mMonitoringService.getMonitoringDataList(
-                Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
-                Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
     }
 
     @Override
@@ -93,19 +90,29 @@ public class FragmentMonitoring extends Fragment {
     public void onResume() {
         Log.d("MonitoringFragment log", "--> onResume()");
         super.onResume();
-        System.out.println("2~!!!!!!!!!!!! " + sensorDataList.size());
     }
 
     @Override
     public void onPause() {
         Log.d("MonitoringFragment log", "--> onPause()");
         super.onPause();
-        System.out.println("3~!!!!!!!!!!!! " + sensorDataList.size());
     }
 
     @Override
     public void onStop() {
         Log.d("MonitoringFragment log", "--> onStop()");
         super.onStop();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        Log.d("MonitoringFragment log", "--> setUserVisibleHint()");
+        super.setUserVisibleHint(isVisibleToUser);
+        if(getUserVisibleHint()) {
+            System.out.println("Data list size --> " + sensorDataList.size());
+            for(SensorData data : sensorDataList) {
+                System.out.println(data);
+            }
+        }
     }
 }
