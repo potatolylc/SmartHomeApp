@@ -13,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import smart.liyinwang.jn.smarthome.R;
-import smart.liyinwang.jn.smarthome.user.LoginActivity;
 
 public class IntroActivity extends Activity {
 

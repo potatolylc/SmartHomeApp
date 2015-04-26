@@ -1,9 +1,16 @@
-package utils;
+package smart.liyinwang.jn.smarthome.utils;
 
 /**
  * Created by ajou on 2015-04-25.
  */
-public interface Utils {
+public interface DummyUtils {
+    // Dummy user serial number of 'wang'
+    public static final int DUMMY_USER_SERIAL_NUM = 11;
+    // Dummy user name of 'wang'
+    public static final String DUMMY_USER_NAME = "wang";
+    // Dummy User WiFi SSID of 'wang'
+    public static final String DUMMY_USER_WIFI_SSID = "social";
+
     // Dummy device serial number of 'wang-outer' (used for Environment Fragment) for test
     public static final String DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM = "5538adf85ace012fc8c64f8a";
 
@@ -13,8 +20,8 @@ public interface Utils {
     public static final String DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_HUMIDITY = "5538ae965ace012fc8c64f8d";
 
     // Dummy start time and end time for showing data graph (used for Monitoring Fragment) for test
-    public static final String DUMMY_START_TIME = "2015/04/25 12:50:00";
-    public static final String DUMMY_END_TIME = "2015/04/25 13:10:00";
-    public static final String DUMMY_START_TIME_LIGHT = "2015/04/25 19:30:00";
-    public static final String DUMMY_END_TIME_LIGHT = "2015/04/25 19:50:00";
+    public static final String DUMMY_START_TIME = "2015/04/26 17:00:00";
+    public static final String DUMMY_END_TIME = "2015/04/26 18:00:00";
+    public static final String DUMMY_START_TIME_LIGHT = "2015/04/26 17:00:00";
+    public static final String DUMMY_END_TIME_LIGHT = "2015/04/26 18:00:00";
 }

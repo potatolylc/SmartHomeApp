@@ -1,8 +1,8 @@
-package service;
+package smart.liyinwang.jn.smarthome.service;
 
 import java.util.List;
 
-import model.SensorData;
+import smart.liyinwang.jn.smarthome.model.SensorData;
 
 
 /**

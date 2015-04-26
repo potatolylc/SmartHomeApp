@@ -1,6 +1,7 @@
-package smart.liyinwang.jn.smarthome.user;
+package smart.liyinwang.jn.smarthome.core;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,8 @@ import android.widget.Button;
 
 import smart.liyinwang.jn.smarthome.R;
 import smart.liyinwang.jn.smarthome.core.MainActivity;
+import smart.liyinwang.jn.smarthome.utils.DummyUtils;
+import smart.liyinwang.jn.smarthome.utils.Utils;
 
 public class LoginActivity extends ActionBarActivity {
     private Button mSignInButton;
@@ -23,6 +26,13 @@ public class LoginActivity extends ActionBarActivity {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: real user authentication to be implemented
+                SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
+                editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
+                editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
+                editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
+                editor.commit();
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();

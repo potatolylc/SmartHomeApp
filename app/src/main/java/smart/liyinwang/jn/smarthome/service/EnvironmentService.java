@@ -1,7 +1,7 @@
-package service;
+package smart.liyinwang.jn.smarthome.service;
 
 
-import model.Environment;
+import smart.liyinwang.jn.smarthome.model.Environment;
 
 /**
  * Created by ajou on 2015-04-08.

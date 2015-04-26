@@ -1,10 +1,8 @@
-package http;
+package smart.liyinwang.jn.smarthome.http;
 
 import android.content.Context;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONObject;
 
 /**
  * Created by ajou on 2015-04-09.

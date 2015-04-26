@@ -1,4 +1,4 @@
-package http;
+package smart.liyinwang.jn.smarthome.http;
 
 /**
  * Created by ajou on 2015-04-08.
@@ -9,4 +9,6 @@ public interface URIRepository {
 
     public static final String LATEST_SENSOR_DATA_SET = URL_BASE_DEBUG + "/sensorData/all/latest";
     public static final String SENSOR_DATA_LIST = URL_BASE_DEBUG + "/sensorData";
+    public static final String PUSH_WEATHER_INFO = URL_BASE_DEBUG + "/weather";
+    public static final String PUSH_GEO_INFO = URL_BASE_DEBUG + "/location";
 }

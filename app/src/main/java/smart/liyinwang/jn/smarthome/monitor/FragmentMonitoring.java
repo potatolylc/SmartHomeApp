@@ -17,7 +17,6 @@
 package smart.liyinwang.jn.smarthome.monitor;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,13 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lecho.lib.hellocharts.listener.ComboLineColumnChartOnValueSelectListener;
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
-import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.ComboLineColumnChartData;
@@ -41,15 +41,15 @@ import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.model.ValueShape;
-import lecho.lib.hellocharts.util.AxisAutoValues;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ComboLineColumnChartView;
 import lecho.lib.hellocharts.view.LineChartView;
-import model.SensorData;
-import service.MonitoringService;
-import service.MonitoringServiceImpl;
+import smart.liyinwang.jn.smarthome.model.SensorData;
+import smart.liyinwang.jn.smarthome.service.MonitoringService;
+import smart.liyinwang.jn.smarthome.service.MonitoringServiceImpl;
 import smart.liyinwang.jn.smarthome.R;
-import utils.Utils;
+import smart.liyinwang.jn.smarthome.utils.DummyUtils;
+import smart.liyinwang.jn.smarthome.utils.Utils;
 
 
 /**
@@ -124,17 +124,24 @@ public class FragmentMonitoring extends Fragment {
         mHumiditySensorDataList = new ArrayList<SensorData>();
         mLightSensorDataList = new ArrayList<SensorData>();
 
+        Date endTime = new Date();
+        Date startTime = new Date(endTime.getTime() - 1500 * 3600);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(Utils.DATE_FORMAT);
+        String startTimeStr = dateFormat.format(startTime);
+        String endTimeStr = dateFormat.format(endTime);
+        System.out.println(startTimeStr + " " + endTimeStr);
+
         mTempSensorDataList =
                 mMonitoringService.getMonitoringDataList(
-                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
-                        Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
+                        DummyUtils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_TEMPERATURE,
+                        startTimeStr, endTimeStr);
         mHumiditySensorDataList =
                 mMonitoringService.getMonitoringDataList(
-                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_HUMIDITY,
-                        Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
+                        DummyUtils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_HUMIDITY,
+                        startTimeStr, endTimeStr);
         mLightSensorDataList = mMonitoringService.getMonitoringDataList(
-                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_LIGHT_BRIGHTNESS,
-                        Utils.DUMMY_START_TIME_LIGHT, Utils.DUMMY_END_TIME_LIGHT);
+                        DummyUtils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_LIGHT_BRIGHTNESS,
+                        startTimeStr, endTimeStr);
     }
 
     @Override
@@ -331,7 +338,7 @@ public class FragmentMonitoring extends Fragment {
         for(int i = 0; i < numberOfColumns; i++) {
             values = new ArrayList<SubcolumnValue>();
             //for(int j = 0; j < numberOfColumns; j++) {
-                double d = (double) mHumiditySensorDataList.get(0).getSensorDataValue();
+                double d = mHumiditySensorDataList.get(i).getSensorDataValue();
                 float f = (float) d;
                 values.add(new SubcolumnValue(
                         f,

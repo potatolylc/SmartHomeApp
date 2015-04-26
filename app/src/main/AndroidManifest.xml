@@ -5,6 +5,7 @@
 
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--
  To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user. This disconnect
      option is required to comply with the Google+ Sign-In developer policies
@@ -32,10 +33,13 @@
         <activity android:name=".core.MainActivity" >
         </activity>
         <activity
-            android:name=".user.LoginActivity"
+            android:name=".core.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
+
+        <service android:name=".service.PushWeatherServiceImpl" android:exported="false"/>
+        <service android:name=".service.PushGeoLocationServiceImpl" android:exported="false"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

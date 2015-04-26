@@ -3,6 +3,8 @@ package smart.liyinwang.jn.smarthome.core;
 /**
  * Created by ajou on 2015-03-04.
  */
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +12,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+
 
 import java.util.ArrayList;
 
@@ -17,11 +21,14 @@ import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 import smart.liyinwang.jn.smarthome.R;
+import smart.liyinwang.jn.smarthome.http.URIRepository;
 import smart.liyinwang.jn.smarthome.monitor.FragmentEnvironment;
 import smart.liyinwang.jn.smarthome.monitor.FragmentMonitoring;
 import smart.liyinwang.jn.smarthome.room.FragmentBedroom;
 import smart.liyinwang.jn.smarthome.room.FragmentKitchen;
 import smart.liyinwang.jn.smarthome.room.FragmentLivingRoom;
+import smart.liyinwang.jn.smarthome.service.PushGeoLocationServiceImpl;
+import smart.liyinwang.jn.smarthome.service.PushWeatherServiceImpl;
 
 public class MainActivity extends ActionBarActivity implements MaterialTabListener {
 
@@ -103,6 +110,17 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
             );
 
         }
+
+        // start weather push service
+        // TODO: get options in shared preferences to enable or disable push service
+        Intent geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
+        geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
+        MainActivity.this.startService(geoServiceIntent);
+
+        Intent weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
+        weatherServiceIntent.setData(Uri.parse(URIRepository.PUSH_WEATHER_INFO));
+        MainActivity.this.startService(weatherServiceIntent);
+
     }
 
 
@@ -141,5 +159,10 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
             return mFragTitleList.get(position);
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
 }

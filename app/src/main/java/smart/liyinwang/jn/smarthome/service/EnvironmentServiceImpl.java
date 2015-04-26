@@ -1,4 +1,4 @@
-package service;
+package smart.liyinwang.jn.smarthome.service;
 
 import com.loopj.android.http.RequestParams;
 
@@ -7,14 +7,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import http.HttpClient;
-import http.ResponseHandler;
-import http.URIRepository;
-import model.Environment;
-import model.SensorData;
+import smart.liyinwang.jn.smarthome.http.HttpClient;
+import smart.liyinwang.jn.smarthome.http.ResponseHandler;
+import smart.liyinwang.jn.smarthome.http.URIRepository;
+import smart.liyinwang.jn.smarthome.model.Environment;
+import smart.liyinwang.jn.smarthome.utils.Utils;
 
 /**
  * Created by ajou on 2015-04-08.
@@ -31,7 +28,7 @@ public class EnvironmentServiceImpl implements EnvironmentService {
         System.out.println(uri);
 
         RequestParams params = new RequestParams();
-        params.put("deviceSerialNum", deviceSerialNum);
+        params.put(Utils.STRING_DEVICE_SERIAL_NUM, deviceSerialNum);
 
         HttpClient.getClient().get(uri, params, new ResponseHandler() {
             @Override
@@ -45,9 +42,13 @@ public class EnvironmentServiceImpl implements EnvironmentService {
                         if(sensorType.equals("lightBrightness")) {
                             environment.setLightBrightness((int)jsonObj.get("sensorDataValue"));
                         } else if(sensorType.equals("temperatureCel")) {
-                            environment.setTemperature((double)jsonObj.get("sensorDataValue"));
+                            environment.setTemperature((double) jsonObj.get("sensorDataValue"));
                         } else if(sensorType.equals("humidity")) {
-                            environment.setHumidity((double)(jsonObj.get("sensorDataValue")));
+                            if(jsonObj.get("sensorDataValue") instanceof Integer) {
+                                environment.setHumidity((int)(jsonObj.get("sensorDataValue")));
+                            } else if(jsonObj.get("sensorDataValue") instanceof Double) {
+                                environment.setHumidity((double)(jsonObj.get("sensorDataValue")));
+                            }
                         }
                     }
                 } catch (JSONException e) {

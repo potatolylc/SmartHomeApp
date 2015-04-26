@@ -1,4 +1,4 @@
-package model;
+package smart.liyinwang.jn.smarthome.model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class SensorData {
     private int sensorDataSerialNum;
-    private Object sensorDataValue;
+    private double sensorDataValue;
     private Date sensorDataTimestamp;
 
     public SensorData() {
     }
 
-    public SensorData(int sensorDataSerialNum, Object sensorDataValue, Date sensorDataTimestamp) {
+    public SensorData(int sensorDataSerialNum, double sensorDataValue, Date sensorDataTimestamp) {
         this.sensorDataSerialNum = sensorDataSerialNum;
         this.sensorDataValue = sensorDataValue;
         this.sensorDataTimestamp = sensorDataTimestamp;
@@ -29,7 +29,11 @@ public class SensorData {
         SensorData sensorData = new SensorData();
         try {
             sensorData.setSensorDataSerialNum((int) response.get("sensorDataSerialNum"));
-            sensorData.setSensorDataValue(response.get("sensorDataValue"));
+            if(response.get("sensorDataValue") instanceof Integer) {
+                sensorData.setSensorDataValue((int) response.get("sensorDataValue"));
+            } else if(response.get("sensorDataValue") instanceof Double) {
+                sensorData.setSensorDataValue((double) response.get("sensorDataValue"));
+            }
             sensorData.setSensorDataTimestamp((Date) new Date((String) response.get("sensorDataTimestamp")));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -55,7 +59,7 @@ public class SensorData {
         return sensorDataSerialNum;
     }
 
-    public Object getSensorDataValue() {
+    public double getSensorDataValue() {
         return sensorDataValue;
     }
 
@@ -67,7 +71,7 @@ public class SensorData {
         this.sensorDataSerialNum = sensorDataSerialNum;
     }
 
-    public void setSensorDataValue(Object sensorDataValue) {
+    public void setSensorDataValue(double sensorDataValue) {
         this.sensorDataValue = sensorDataValue;
     }
 

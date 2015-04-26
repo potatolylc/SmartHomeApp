@@ -1,4 +1,4 @@
-package model;
+package smart.liyinwang.jn.smarthome.model;
 
 /**
  * Created by ajou on 2015-04-08.

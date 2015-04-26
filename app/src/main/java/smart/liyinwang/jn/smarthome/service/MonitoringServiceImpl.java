@@ -1,4 +1,4 @@
-package service;
+package smart.liyinwang.jn.smarthome.service;
 
 import com.loopj.android.http.RequestParams;
 
@@ -10,10 +10,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import http.HttpClient;
-import http.ResponseHandler;
-import http.URIRepository;
-import model.SensorData;
+import smart.liyinwang.jn.smarthome.http.HttpClient;
+import smart.liyinwang.jn.smarthome.http.ResponseHandler;
+import smart.liyinwang.jn.smarthome.http.URIRepository;
+import smart.liyinwang.jn.smarthome.model.SensorData;
+import smart.liyinwang.jn.smarthome.utils.Utils;
 
 /**
  * Created by ajou on 2015-04-25.
@@ -30,7 +31,7 @@ public class MonitoringServiceImpl implements MonitoringService {
         System.out.println(uri);
 
         RequestParams params = new RequestParams();
-        params.put("sensorSerialNum", sensorSerialNum);
+        params.put(Utils.STRING_SENSOR_SERIAL_NUM, sensorSerialNum);
         params.put("startTime", startTime);
         params.put("endTime", endTime);
 

@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import model.Environment;
-import service.EnvironmentService;
-import service.EnvironmentServiceImpl;
+import smart.liyinwang.jn.smarthome.model.Environment;
+import smart.liyinwang.jn.smarthome.service.EnvironmentService;
+import smart.liyinwang.jn.smarthome.service.EnvironmentServiceImpl;
 import smart.liyinwang.jn.smarthome.R;
-import utils.Utils;
+import smart.liyinwang.jn.smarthome.utils.DummyUtils;
 
 
 /**
@@ -56,7 +56,7 @@ public class FragmentEnvironment extends Fragment {
     public void loadData() {
         mEnvironmentService = new EnvironmentServiceImpl();
         mEnvironment = new Environment();
-        mEnvironment = mEnvironmentService.getEnvironmentData(Utils.DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM);
+        mEnvironment = mEnvironmentService.getEnvironmentData(DummyUtils.DUMMY_ENVIRONMENT_DEVICE_SERIAL_NUM);
     }
 
     @Override
