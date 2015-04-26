@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="smart.liyinwang.jn.smarthome.monitor.FragmentMonitoring">
@@ -12,6 +12,13 @@
         android:layout_width="360dp"
         android:layout_height="200dp"
         android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_centerHorizontal="true"/>
 
-</FrameLayout>
+    <lecho.lib.hellocharts.view.LineChartView
+        android:id="@+id/monitoring_light_brightness_chart"
+        android:layout_width="330dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/monitoring_temperature_chart"/>
+
+</RelativeLayout>

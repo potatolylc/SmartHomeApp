@@ -22,7 +22,7 @@
 
     <ImageView
         android:id="@+id/environment_brightness_imageView"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_gravity="left|center_vertical"
         android:src="@drawable/brightness_line"/>
@@ -30,32 +30,34 @@
     <TextView
         android:id="@+id/environment_brightness_textView"
         android:layout_width="152dp"
-        android:layout_height="113dp"
+        android:layout_height="95dp"
         android:gravity="bottom"
         android:layout_gravity="right|center_vertical"
         android:text="0"
         android:textColor="#94BD15"
-        android:textSize="50dp"/>
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/environment_temperature_textView"
+        android:layout_width="130dp"
+        android:layout_height="136dp"
+        android:gravity="bottom"
+        android:layout_gravity="center_horizontal|top"
+        android:text="0"
+        android:textColor="#A349A4"
+        android:textSize="30dp"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/environment_humidity_textView"
-        android:layout_width="175dp"
-        android:layout_height="155dp"
+        android:layout_width="188dp"
+        android:layout_height="147dp"
         android:gravity="top"
         android:layout_gravity="right|bottom"
         android:text="0"
         android:textColor="#00A2E8"
-        android:textSize="50dp" />
-
-    <TextView
-        android:id="@+id/environment_temperature_textView"
-        android:layout_width="230dp"
-        android:layout_height="149dp"
-        android:gravity="bottom"
-        android:layout_gravity="right|top"
-        android:text="0"
-        android:textColor="#A349A4"
-        android:textSize="50dp"/>
+        android:textSize="30dp"
+        android:textAlignment="center"/>
 
 
 </FrameLayout>

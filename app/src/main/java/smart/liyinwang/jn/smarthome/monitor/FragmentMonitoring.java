@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lecho.lib.hellocharts.listener.ComboLineColumnChartOnValueSelectListener;
+import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Column;
 import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.ComboLineColumnChartData;
@@ -38,7 +40,11 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.model.ValueShape;
+import lecho.lib.hellocharts.util.AxisAutoValues;
+import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ComboLineColumnChartView;
+import lecho.lib.hellocharts.view.LineChartView;
 import model.SensorData;
 import service.MonitoringService;
 import service.MonitoringServiceImpl;
@@ -52,23 +58,44 @@ import utils.Utils;
  * of the past one hour.
  */
 public class FragmentMonitoring extends Fragment {
-    // chart view
-    private ComboLineColumnChartView mChartView;
-    private ComboLineColumnChartData mChartData;
+    // column line chart view
+    private ComboLineColumnChartView mCLChartView;
+    private ComboLineColumnChartData mCLChartData;
 
-    // chart numbers
-    private int mNumberOfLines = 1;
-    private int mMaxNumberOfLines = 4;
-    private int mNumberOfPoints = 0;
+    // line chart view
+    private LineChartView mLineChartView;
+    private LineChartData mLineChartData;
 
-    // chart booleans
-    private boolean hasAxes = true;
-    private boolean hasAxesNames = true;
-    private boolean hasPoints = true;
-    private boolean hasLines = true;
-    private boolean hasSeperationLines = true;
-    private boolean isCubic = false;
-    private boolean hasLabels = false;
+    // column line chart numbers
+    private int mCLNumberOfLines = 1;
+    private int mCLMaxNumberOfLines = 4;
+    private int mCLNumberOfPoints = 0;
+
+    // line chart numbers
+    private int mLNumberOfLines = 1;
+    private int mLMaxNumberOfLines = 4;
+    private int mLNumberOfPoints = 0;
+
+    // column line chart booleans
+    private boolean mCLhasAxes = true;
+    private boolean mCLhasAxesNames = true;
+    private boolean mCLhasPoints = true;
+    private boolean mCLhasLines = true;
+    private boolean mCLhasSeperationLines = true;
+    private boolean mCLisCubic = false;
+    private boolean mCLhasLabels = false;
+    private boolean mCLhasLabelForSelected = true;
+
+    // line chart booleans
+    private boolean mLhasAxes = true;
+    private boolean mLhasAxesNames = true;
+    private boolean mLhasPoints = true;
+    private boolean mLhasLines = true;
+    private boolean mLisFilled = false;
+    private boolean mLisCubic = false;
+    private boolean mLhasLabels = false;
+    private boolean mLhasLabelForSelected = true;
+    private ValueShape mLlineShape = ValueShape.CIRCLE;
 
     // main view
     private View mMainView;
@@ -77,6 +104,7 @@ public class FragmentMonitoring extends Fragment {
     private MonitoringService mMonitoringService;
     List<SensorData> mTempSensorDataList;
     List<SensorData> mHumiditySensorDataList;
+    List<SensorData> mLightSensorDataList;
 
     public static FragmentMonitoring newInstance() {
         Log.d("MonitoringFragment log", "--> new Instance()");
@@ -94,6 +122,7 @@ public class FragmentMonitoring extends Fragment {
 
         mTempSensorDataList = new ArrayList<SensorData>();
         mHumiditySensorDataList = new ArrayList<SensorData>();
+        mLightSensorDataList = new ArrayList<SensorData>();
 
         mTempSensorDataList =
                 mMonitoringService.getMonitoringDataList(
@@ -103,6 +132,9 @@ public class FragmentMonitoring extends Fragment {
                 mMonitoringService.getMonitoringDataList(
                         Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_HUMIDITY,
                         Utils.DUMMY_START_TIME, Utils.DUMMY_END_TIME);
+        mLightSensorDataList = mMonitoringService.getMonitoringDataList(
+                        Utils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_LIGHT_BRIGHTNESS,
+                        Utils.DUMMY_START_TIME_LIGHT, Utils.DUMMY_END_TIME_LIGHT);
     }
 
     @Override
@@ -121,8 +153,8 @@ public class FragmentMonitoring extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_monitoring, container, false);
 
-        mChartView = (ComboLineColumnChartView) view.findViewById(R.id.monitoring_temperature_chart);
-        mChartView.setOnValueTouchListener(new ComboLineColumnChartOnValueSelectListener() {
+        mCLChartView = (ComboLineColumnChartView) view.findViewById(R.id.monitoring_temperature_chart);
+        mCLChartView.setOnValueTouchListener(new ComboLineColumnChartOnValueSelectListener() {
             @Override
             public void onColumnValueSelected(int i, int i2, SubcolumnValue subcolumnValue) {
 
@@ -130,6 +162,19 @@ public class FragmentMonitoring extends Fragment {
 
             @Override
             public void onPointValueSelected(int i, int i2, PointValue pointValue) {
+
+            }
+
+            @Override
+            public void onValueDeselected() {
+
+            }
+        });
+
+        mLineChartView = (LineChartView) view.findViewById(R.id.monitoring_light_brightness_chart);
+        mLineChartView.setOnValueTouchListener(new LineChartOnValueSelectListener() {
+            @Override
+            public void onValueSelected(int i, int i2, PointValue pointValue) {
 
             }
 
@@ -185,18 +230,53 @@ public class FragmentMonitoring extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(getUserVisibleHint()) {
             // debug
-            System.out.println("Data list size --> " + mTempSensorDataList.size() + " " + mHumiditySensorDataList.size());
+            System.out.println("Data list size --> "
+                    + mTempSensorDataList.size() + " "
+                    + mHumiditySensorDataList.size() + " "
+                    + mLightSensorDataList.size());
 
-            mNumberOfPoints = mTempSensorDataList.size();
+            mCLNumberOfPoints = mTempSensorDataList.size();
+            mLNumberOfPoints = mLightSensorDataList.size();
 
             generateGraph();
         }
     }
 
     private void generateGraph() {
-        mChartData = new ComboLineColumnChartData(generateColumnGraph(), generateLineGraph());
+        // column line chart generation
+        mCLChartData = new ComboLineColumnChartData(generateColumnGraph(), generateCLLineGraph());
+        if (mCLhasAxes) {
+            Axis axisX = new Axis();
+            Axis axisYLeft = new Axis().setHasLines(false);
+            Axis axisYRight = new Axis().setHasLines(mCLhasLines);
+            axisX.setLineColor(getResources().getColor(R.color.light_grey_color));
+            axisYLeft.setLineColor(getResources().getColor(R.color.light_grey_color));
+            axisYRight.setLineColor(getResources().getColor(R.color.light_grey_color));
+            axisX.setTextColor(getResources().getColor(R.color.light_grey_color));
+            axisYLeft.setTextColor(getResources().getColor(R.color.light_grey_color));
+            axisYRight.setTextColor(getResources().getColor(R.color.light_grey_color));
+            axisX.setTextSize(15);
+            axisYLeft.setTextSize(15);
+            axisYRight.setTextSize(15);
+            axisX.setHasSeparationLine(mCLhasSeperationLines);
+            if (mCLhasAxesNames) {
+                axisX.setName("Time");
+                axisYLeft.setName("Humidity");
+                axisYRight.setName("Temperature");
+            }
+            mCLChartData.setAxisXBottom(axisX);
+            mCLChartData.setAxisYLeft(axisYLeft);
+            mCLChartData.setAxisYRight(axisYRight);
+        } else {
+            mCLChartData.setAxisXBottom(null);
+            mCLChartData.setAxisYLeft(null);
+            mCLChartData.setAxisYRight(null);
+        }
+        mCLChartView.setComboLineColumnChartData(mCLChartData);
 
-        if (hasAxes) {
+        // line chart generation
+        mLineChartData = generateLLineGraph();
+        if(mLhasAxes) {
             Axis axisX = new Axis();
             Axis axisY = new Axis().setHasLines(true);
             axisX.setLineColor(getResources().getColor(R.color.light_grey_color));
@@ -205,37 +285,37 @@ public class FragmentMonitoring extends Fragment {
             axisY.setTextColor(getResources().getColor(R.color.light_grey_color));
             axisX.setTextSize(15);
             axisY.setTextSize(15);
-            axisX.setHasSeparationLine(hasSeperationLines);
-            if (hasAxesNames) {
+            if (mLhasAxesNames) {
                 axisX.setName("Time");
-                axisY.setName("Value");
+                axisY.setName("Brightness");
             }
-            mChartData.setAxisXBottom(axisX);
-            mChartData.setAxisYLeft(axisY);
+            mLineChartData.setAxisXBottom(axisX);
+            mLineChartData.setAxisYLeft(axisY);
         } else {
-            mChartData.setAxisXBottom(null);
-            mChartData.setAxisYLeft(null);
+            mLineChartData.setAxisXBottom(null);
+            mLineChartData.setAxisYLeft(null);
         }
-
-        mChartView.setComboLineColumnChartData(mChartData);
+        mLineChartData.setBaseValue(0);
+        mLineChartView.setLineChartData(mLineChartData);
     }
 
-    private LineChartData generateLineGraph() {
+    private LineChartData generateCLLineGraph() {
         List<Line> lines = new ArrayList<Line>();
-        for(int i = 0; i < mNumberOfLines; i++) {
+        for(int i = 0; i < mCLNumberOfLines; i++) {
             List<PointValue> values = new ArrayList<PointValue>();
-            for(int j = 0; j < mNumberOfPoints; j++) {
+            for(int j = 0; j < mCLNumberOfPoints; j++) {
                 double d = (double) mTempSensorDataList.get(j).getSensorDataValue();
                 float f = (float) d;
                 values.add(new PointValue(j, f));
             }
 
             Line line = new Line(values);
-            line.setColor(getResources().getColor(R.color.basic_color));
-            line.setCubic(isCubic);
-            line.setHasLabels(hasLabels);
-            line.setHasLines(hasLines);
-            line.setHasPoints(hasPoints);
+            line.setColor(ChartUtils.COLOR_BLUE);
+            line.setCubic(mCLisCubic);
+            line.setHasLabels(mCLhasLabels);
+            line.setHasLabelsOnlyForSelected(mCLhasLabelForSelected);
+            line.setHasLines(mCLhasLines);
+            line.setHasPoints(mCLhasPoints);
             lines.add(line);
         }
 
@@ -257,61 +337,88 @@ public class FragmentMonitoring extends Fragment {
                         f,
                         getResources().getColor(R.color.light_blue_color)));
             //}
-            columns.add(new Column(values));
+
+            Column column = new Column(values);
+            column.setHasLabelsOnlyForSelected(mCLhasLabelForSelected);
+            columns.add(column);
         }
 
         ColumnChartData columnChartData = new ColumnChartData(columns);
         return columnChartData;
     }
 
+    private LineChartData generateLLineGraph() {
+        List<Line> lines = new ArrayList<Line>();
+        for(int i = 0; i < mLNumberOfLines; i++) {
+            List<PointValue> values = new ArrayList<PointValue>();
+            for(int j = 0; j < mLNumberOfPoints; j++) {
+                values.add(new PointValue(j, (int) mLightSensorDataList.get(j).getSensorDataValue()));
+            }
+
+            Line line = new Line(values);
+            line.setColor(getResources().getColor(R.color.sky_blue_color));
+            line.setShape(mLlineShape);
+            line.setCubic(mLisCubic);
+            line.setFilled(mLisFilled);
+            line.setHasLabels(mLhasLabels);
+            line.setHasLines(mLhasLines);
+            line.setHasPoints(mLhasPoints);
+            line.setHasLabelsOnlyForSelected(mLhasLabelForSelected);
+            lines.add(line);
+        }
+
+        LineChartData lineChartData = new LineChartData(lines);
+        return lineChartData;
+    }
+
     private void toggleLines() {
-        hasLines = !hasLines;
+        mCLhasLines = !mCLhasLines;
 
         generateGraph();
     }
 
     private void toggleSeperationLines() {
-        hasSeperationLines = !hasSeperationLines;
+        mCLhasSeperationLines = !mCLhasSeperationLines;
 
         generateGraph();
     }
 
     private void togglePoints() {
-        hasPoints = !hasPoints;
+        mCLhasPoints = !mCLhasPoints;
 
         generateGraph();
     }
 
     private void toggleCubic() {
-        isCubic = !isCubic;
+        mCLisCubic = !mCLisCubic;
 
         generateGraph();
     }
 
     private void toggleLabels() {
-        hasLabels = !hasLabels;
+        mCLhasLabels = !mCLhasLabels;
 
         generateGraph();
     }
 
     private void toggleAxes() {
-        hasAxes = !hasAxes;
+        mCLhasAxes = !mCLhasAxes;
 
         generateGraph();
     }
 
     private void toggleAxesNames() {
-        hasAxesNames = !hasAxesNames;
+        mCLhasAxesNames = !mCLhasAxesNames;
 
         generateGraph();
     }
 
     private void addLineToData() {
-        if (mChartData.getLineChartData().getLines().size() >= mMaxNumberOfLines) {
+        if (mCLChartData.getLineChartData().getLines().size() >= mCLMaxNumberOfLines) {
             Toast.makeText(getActivity(), "Samples app uses max 4 lines!", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            ++mNumberOfLines;
+            ++mCLNumberOfLines;
         }
 
         generateGraph();
@@ -321,7 +428,7 @@ public class FragmentMonitoring extends Fragment {
     private void prepareDataAnimation() {
 
         // Line animations
-        for (Line line : mChartData.getLineChartData().getLines()) {
+        for (Line line : mCLChartData.getLineChartData().getLines()) {
             for (PointValue value : line.getValues()) {
                 // Here I modify target only for Y values but it is OK to modify X targets as well.
                 value.setTarget(value.getX(), (float) Math.random() * 50 + 5);
@@ -329,7 +436,7 @@ public class FragmentMonitoring extends Fragment {
         }
 
         // Columns animations
-        for (Column column : mChartData.getColumnChartData().getColumns()) {
+        for (Column column : mCLChartData.getColumnChartData().getColumns()) {
             for (SubcolumnValue value : column.getValues()) {
                 value.setTarget((float) Math.random() * 50 + 5);
             }

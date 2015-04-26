@@ -4,49 +4,49 @@ package model;
  * Created by ajou on 2015-04-08.
  */
 public class Environment {
-    private String temperature;
-    private String lightBrightness;
-    private String humidity;
+    private double temperature;
+    private double lightBrightness;
+    private double humidity;
 
     public Environment() {
     }
 
-    public Environment(String temperature, String lightBrightness, String humidity) {
+    public Environment(double temperature, double lightBrightness, double humidity) {
         this.temperature = temperature;
         this.lightBrightness = lightBrightness;
         this.humidity = humidity;
     }
 
-    public String getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
-    public String getLightBrightness() {
+    public double getLightBrightness() {
         return lightBrightness;
     }
 
-    public String getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
-    public void setLightBrightness(String lightBrightness) {
+    public void setLightBrightness(double lightBrightness) {
         this.lightBrightness = lightBrightness;
     }
 
-    public void setHumidity(String humidity) {
+    public void setHumidity(double humidity) {
         this.humidity = humidity;
     }
 
     @Override
     public String toString() {
         return "Environment{" +
-                "temperature='" + temperature + '\'' +
-                ", lightBrightness='" + lightBrightness + '\'' +
-                ", humidity='" + humidity + '\'' +
+                "temperature=" + temperature +
+                ", lightBrightness=" + lightBrightness +
+                ", humidity=" + humidity +
                 '}';
     }
 }

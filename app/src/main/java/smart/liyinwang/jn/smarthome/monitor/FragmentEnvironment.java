@@ -41,6 +41,9 @@ public class FragmentEnvironment extends Fragment {
     private EnvironmentService mEnvironmentService;
     private Environment mEnvironment;
 
+    public FragmentEnvironment() {
+    }
+
     public static FragmentEnvironment newInstance() {
         Log.d("EnvironmentFragment log", "--> new Instance()");
         FragmentEnvironment fragment = new FragmentEnvironment();
@@ -49,8 +52,6 @@ public class FragmentEnvironment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-    public FragmentEnvironment() {}
 
     public void loadData() {
         mEnvironmentService = new EnvironmentServiceImpl();
@@ -64,33 +65,46 @@ public class FragmentEnvironment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
-        // init view
-        initMainView();
-        initImageView();
-        initTextView();
-
         // load data from server
         loadData();
     }
 
-    public void initMainView() {
-        // main view inflation
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup)getActivity().findViewById(R.id.pager), false);
-    }
-
     public void initImageView() {
         // init ImageView
-        mTempImageView = (ImageView)mMainView.findViewById(R.id.environment_temperature_imageView);
-        mBrightImageView = (ImageView)mMainView.findViewById(R.id.environment_brightness_imageView);
-        mHumidityImageView = (ImageView)mMainView.findViewById(R.id.environment_humidity_imageView);
+        mTempImageView = (ImageView) mMainView.findViewById(R.id.environment_temperature_imageView);
+        mBrightImageView = (ImageView) mMainView.findViewById(R.id.environment_brightness_imageView);
+        mHumidityImageView = (ImageView) mMainView.findViewById(R.id.environment_humidity_imageView);
     }
 
     public void initTextView() {
         // init textView
-        mTempTextView = (TextView)mMainView.findViewById(R.id.environment_temperature_textView);
-        mBrightTextView = (TextView)mMainView.findViewById(R.id.environment_brightness_textView);
-        mHumidityTextView = (TextView)mMainView.findViewById(R.id.environment_humidity_textView);
+        mTempTextView = (TextView) mMainView.findViewById(R.id.environment_temperature_textView);
+        mBrightTextView = (TextView) mMainView.findViewById(R.id.environment_brightness_textView);
+        mHumidityTextView = (TextView) mMainView.findViewById(R.id.environment_humidity_textView);
+    }
+
+    public void setEnvironmentTextView() {
+        if(mTempTextView == null || mBrightTextView == null || mHumidityTextView == null)
+            return;
+        if(mEnvironment != null) {
+
+            String tempText = Double.toString(mEnvironment.getTemperature());
+            mTempTextView.setText(tempText);
+
+            String lightText = null;
+            double brightness = mEnvironment.getLightBrightness();
+            if(brightness >= 0 && brightness < 300) {
+                lightText = "Dim";
+            } else if(brightness >300 && brightness <= 700) {
+                lightText = "Soft";
+            } else if(brightness > 700 && brightness <= 1000) {
+                lightText = "Bright";
+            }
+            mBrightTextView.setText(lightText);
+
+            String humiText = Double.toString(mEnvironment.getHumidity());
+            mHumidityTextView.setText(humiText);
+        }
     }
 
     @Override
@@ -98,13 +112,22 @@ public class FragmentEnvironment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("EnvironmentFragment log", "--> onCreateView()");
 
+        // init main view
+        inflater = getActivity().getLayoutInflater();
+        mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup) getActivity().findViewById(R.id.pager), false);
+
+        // init view
+        initImageView();
+        initTextView();
+
         // Inflate the layout for this fragment
-        ViewGroup vp = (ViewGroup)mMainView.getParent();
-        if(vp != null) {
+        ViewGroup vp = (ViewGroup) mMainView.getParent();
+        if (vp != null) {
             vp.removeAllViewsInLayout();
             Log.d("EnvironmentFragment log", "--> All views removed");
         }
-        return inflater.inflate(R.layout.fragment_environment, container, false);
+
+        return mMainView;
     }
 
     @Override
@@ -147,8 +170,9 @@ public class FragmentEnvironment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         Log.d("EnvironmentFragment log", "--> setUserVisibleHint()");
         super.setUserVisibleHint(isVisibleToUser);
-        if(getUserVisibleHint()) {
+        if (getUserVisibleHint()) {
             System.out.println("Data --> " + mEnvironment);
+            setEnvironmentTextView();
         }
     }
 }

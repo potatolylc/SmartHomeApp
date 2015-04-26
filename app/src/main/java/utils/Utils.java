@@ -15,4 +15,6 @@ public interface Utils {
     // Dummy start time and end time for showing data graph (used for Monitoring Fragment) for test
     public static final String DUMMY_START_TIME = "2015/04/25 12:50:00";
     public static final String DUMMY_END_TIME = "2015/04/25 13:10:00";
+    public static final String DUMMY_START_TIME_LIGHT = "2015/04/25 19:30:00";
+    public static final String DUMMY_END_TIME_LIGHT = "2015/04/25 19:50:00";
 }

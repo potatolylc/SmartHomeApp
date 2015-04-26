@@ -1,6 +1,5 @@
 package service;
 
-import android.content.Context;
 
 import model.Environment;
 
