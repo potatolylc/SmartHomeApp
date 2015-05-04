@@ -6,6 +6,7 @@ package smart.liyinwang.jn.smarthome.http;
 public interface URIRepository {
     // Host URI for test
     public static final String URL_BASE_DEBUG = "http://192.168.0.11:8888/MavenIoEData";
+    public static final String WEBSOCKET_BASE_DEBUG = "ws://192.168.0.11:8888/MavenIoEData/socket";
 
     // user API URI
     public static final String USER_LOGIN_AUTHENTICATION = URL_BASE_DEBUG + "/user/auth";
@@ -17,4 +18,10 @@ public interface URIRepository {
     // dynamic data API URI
     public static final String PUSH_WEATHER_INFO = URL_BASE_DEBUG + "/weather";
     public static final String PUSH_GEO_INFO = URL_BASE_DEBUG + "/location";
+
+    // push service
+
+    // push services
+    public final static String SUBSCRIPTION_DESTINATION_USER_IS_NEAR_HOME = "/queue/isNearHome";
+    public final static String SEND_DESTINATION_GEO_COORDINATE = "/app/geoCoordinate";
 }

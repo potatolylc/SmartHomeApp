@@ -5,6 +5,7 @@ package smart.liyinwang.jn.smarthome.core;
  */
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -123,10 +124,12 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
 
         // start geo location and weather push service
         // TODO: get options in shared preferences to enable or disable push service
-        startPushService();
-
-        // websocket subscribe
-        websocketSubscribe();
+        if(true) {
+            startPushWeatherService();
+        }
+        if(true) {
+            startPushGeoLocationService();
+        }
     }
 
     @Override
@@ -185,31 +188,17 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void startPushService() {
-        geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
-        geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
-        MainActivity.this.startService(geoServiceIntent);
-
+    private void startPushWeatherService() {
         weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
         weatherServiceIntent.setData(Uri.parse(URIRepository.PUSH_WEATHER_INFO));
         MainActivity.this.startService(weatherServiceIntent);
-
     }
 
-    private void websocketSubscribe() {
-        Map<String, String> headers = new HashMap<String, String>();
-        Stomp stomp = new Stomp("ws://localhost:8888/MavenIoEData/socket", headers, new ListenerWSNetwork() {
-            @Override
-            public void onState(int state) {
-
-            }
-        });
-        stomp.connect();
-        stomp.subscribe(new Subscription("/queue/isNearHome", new ListenerSubscription() {
-            @Override
-            public void onMessage(Map<String, String> headers, String body) {
-                System.out.println("Got subscription!");
-            }
-        }));
+    private void startPushGeoLocationService() {
+        geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
+        geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
+        MainActivity.this.startService(geoServiceIntent);
     }
+
+
 }

@@ -103,11 +103,12 @@ public class LoginActivity extends ActionBarActivity {
                     boolean loginFlag = (boolean)response.get("result");
                     if(loginFlag) {
                         System.out.println("Login succeeded...");
+                        int userSerialNum = (int) response.get(Utils.STRING_USER_SERIAL_NUM);
 
                         SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
-                        editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
-                        editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
-                        editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
+                        editor.putInt(Utils.STRING_USER_SERIAL_NUM, userSerialNum);
+                        editor.putString(Utils.STRING_USER_NAME, mUserName);
+                        editor.putString(Utils.STRING_USER_WIFI_SSID, mUserWifiSsid);
                         editor.commit();
 
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);

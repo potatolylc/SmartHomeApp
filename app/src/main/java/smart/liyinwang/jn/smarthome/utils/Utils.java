@@ -23,6 +23,7 @@ public interface Utils {
     public final static String STRING_PRESSURE = "pressure";
 
     // path variable / request parameter strings for REST API - location
+    public final static String STRING_GEO_COORDINATE = "geoCoordinate";
     public final static String STRING_LONGITUDE = "longitude";
     public final static String STRING_LATITUDE = "latitude";
 

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
  */
 public abstract class PushService extends IntentService {
     SharedPreferences mPreferences;
+    int mUserSerialNum;
     String mUserName;
     String mUserWifiSsid;
     String mUri;
