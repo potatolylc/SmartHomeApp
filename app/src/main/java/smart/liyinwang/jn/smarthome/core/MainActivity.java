@@ -48,6 +48,10 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     // list of fragment titles
     private ArrayList<String> mFragTitleList;
 
+    // service intents
+    Intent geoServiceIntent;
+    Intent weatherServiceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,18 +115,31 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
 
         }
 
-        // start weather push service
+        // start geo location and weather push service
         // TODO: get options in shared preferences to enable or disable push service
-        Intent geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
+        geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
         geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
         MainActivity.this.startService(geoServiceIntent);
 
-        Intent weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
+        weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
         weatherServiceIntent.setData(Uri.parse(URIRepository.PUSH_WEATHER_INFO));
         MainActivity.this.startService(weatherServiceIntent);
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainActivity.this.startService(geoServiceIntent);
+        MainActivity.this.startService(weatherServiceIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MainActivity.this.stopService(geoServiceIntent);
+        MainActivity.this.stopService(weatherServiceIntent);
+    }
 
     @Override
     public void onTabSelected(MaterialTab tab) {

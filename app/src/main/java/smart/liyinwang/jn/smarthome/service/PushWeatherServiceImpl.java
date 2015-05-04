@@ -161,7 +161,7 @@ public class PushWeatherServiceImpl extends PushService {
             pushWeatherInfo(Utils.STRING_LIGHT_BRIGHTNESS);
             System.out.println(mLightBrightnessValue);
             try {
-                Thread.sleep(30000);
+                Thread.sleep(300000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -4,62 +4,87 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import smart.liyinwang.jn.smarthome.R;
-import smart.liyinwang.jn.smarthome.core.MainActivity;
+import smart.liyinwang.jn.smarthome.http.HttpClient;
+import smart.liyinwang.jn.smarthome.http.ResponseHandler;
+import smart.liyinwang.jn.smarthome.http.URIRepository;
 import smart.liyinwang.jn.smarthome.utils.DummyUtils;
 import smart.liyinwang.jn.smarthome.utils.Utils;
 
 public class LoginActivity extends ActionBarActivity {
+    // view component
+    private AutoCompleteTextView mUserNameAutoText;
+    private AutoCompleteTextView mWifiSsidAutoText;
+    private EditText mPasswordEditText;
     private Button mSignInButton;
+
+    // input variables
+    String mUserName;
+    String mUserWifiSsid;
+    String mUserPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mUserNameAutoText = (AutoCompleteTextView) findViewById(R.id.login_user_name_edit_text);
+        mWifiSsidAutoText = (AutoCompleteTextView) findViewById(R.id.login_wifi_ssid_edit_text);
+        mPasswordEditText = (EditText) findViewById(R.id.login_password_edit_text);
+
         mSignInButton = (Button)findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: real user authentication to be implemented
-                SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
-                editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
-                editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
-                editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
-                editor.commit();
+                mUserName = mUserNameAutoText.getText().toString();
+                mUserWifiSsid = mWifiSsidAutoText.getText().toString();
+                mUserPassword = mPasswordEditText.getText().toString();
 
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+                String uri = String.format(URIRepository.USER_LOGIN_AUTHENTICATION);
+                System.out.println(uri);
+
+                RequestParams params = new RequestParams();
+                params.put(Utils.STRING_USER_NAME, mUserName);
+                params.put(Utils.STRING_USER_WIFI_SSID, mUserWifiSsid);
+                params.put(Utils.STRING_USER_PASSWORD, mUserPassword);
+
+                HttpClient.getClient().get(uri, params, new ResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            boolean loginFlag = (boolean)response.get("result");
+                            if(loginFlag) {
+                                System.out.println("Login succeeded...");
+
+                                SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
+                                editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
+                                editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
+                                editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
+                                editor.commit();
+
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                LoginActivity.this.startActivity(intent);
+                                LoginActivity.this.finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

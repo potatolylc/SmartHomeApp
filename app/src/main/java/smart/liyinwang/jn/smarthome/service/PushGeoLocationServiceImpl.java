@@ -9,6 +9,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.loopj.android.http.RequestParams;
+
+import smart.liyinwang.jn.smarthome.http.HttpClient;
+import smart.liyinwang.jn.smarthome.http.ResponseHandler;
 import smart.liyinwang.jn.smarthome.utils.Utils;
 
 /**
@@ -29,6 +33,13 @@ public class PushGeoLocationServiceImpl extends PushService {
     public void pushGeoInfo() {
         Log.d("PushGeoService log", "--> pushGeoInfo()");
 
+        RequestParams params = new RequestParams();
+        params.put(Utils.STRING_USER_NAME, mUserName);
+        params.put(Utils.STRING_USER_WIFI_SSID, mUserWifiSsid);
+        params.put(Utils.STRING_LONGITUDE, mLongitude);
+        params.put(Utils.STRING_LATITUDE, mLatitude);
+
+        HttpClient.getClient().post(mUri, params, new ResponseHandler() {});
     }
 
     private void getLocation() {
@@ -95,7 +106,7 @@ public class PushGeoLocationServiceImpl extends PushService {
             System.out.println("Push Service..." + mUri + " " + mUserName + " " + mUserWifiSsid);
             pushGeoInfo();
             try {
-                Thread.sleep(30000);
+                Thread.sleep(300000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

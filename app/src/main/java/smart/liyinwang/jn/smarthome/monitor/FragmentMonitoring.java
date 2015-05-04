@@ -141,7 +141,7 @@ public class FragmentMonitoring extends Fragment {
                         startTimeStr, endTimeStr);
         mLightSensorDataList = mMonitoringService.getMonitoringDataList(
                         DummyUtils.DUMMY_ENVIRONMENT_SENSOR_SERIAL_NUM_LIGHT_BRIGHTNESS,
-                        startTimeStr, endTimeStr);
+                startTimeStr, endTimeStr);
     }
 
     @Override
