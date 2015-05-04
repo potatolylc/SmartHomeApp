@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.loopj.android.http.RequestParams;
 
@@ -47,42 +48,78 @@ public class LoginActivity extends ActionBarActivity {
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserName = mUserNameAutoText.getText().toString();
-                mUserWifiSsid = mWifiSsidAutoText.getText().toString();
-                mUserPassword = mPasswordEditText.getText().toString();
+                getInput();
+                boolean flag = checkInputSpace();
+                if(flag)
+                    attemptLogin();
+            }
+        });
+    }
 
-                String uri = String.format(URIRepository.USER_LOGIN_AUTHENTICATION);
-                System.out.println(uri);
+    private void getInput() {
+        mUserName = mUserNameAutoText.getText().toString();
+        mUserWifiSsid = mWifiSsidAutoText.getText().toString();
+        mUserPassword = mPasswordEditText.getText().toString();
+    }
 
-                RequestParams params = new RequestParams();
-                params.put(Utils.STRING_USER_NAME, mUserName);
-                params.put(Utils.STRING_USER_WIFI_SSID, mUserWifiSsid);
-                params.put(Utils.STRING_USER_PASSWORD, mUserPassword);
+    private boolean checkInputSpace() {
+        boolean flag = false;
+        if(mUserName.equals("")) {
+            Toast.makeText(this, "Please input user name.", Toast.LENGTH_SHORT).show();
+            return flag;
+        }
+        if(mUserWifiSsid.equals("")) {
+            Toast.makeText(this, "Please input WiFi name.", Toast.LENGTH_SHORT).show();
+            return flag;
+        }
+        if(mUserPassword.equals("")) {
+            Toast.makeText(this, "Please input password.", Toast.LENGTH_SHORT).show();
+            return flag;
+        }
+        flag = true;
+        return flag;
+    }
 
-                HttpClient.getClient().get(uri, params, new ResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        try {
-                            boolean loginFlag = (boolean)response.get("result");
-                            if(loginFlag) {
-                                System.out.println("Login succeeded...");
+    private void clearInput() {
+        mUserNameAutoText.setText("");
+        mWifiSsidAutoText.setText("");
+        mPasswordEditText.setText("");
+    }
 
-                                SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
-                                editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
-                                editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
-                                editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
-                                editor.commit();
+    private void attemptLogin() {
+        String uri = String.format(URIRepository.USER_LOGIN_AUTHENTICATION);
+        System.out.println(uri);
 
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                LoginActivity.this.startActivity(intent);
-                                LoginActivity.this.finish();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+        RequestParams params = new RequestParams();
+        params.put(Utils.STRING_USER_NAME, mUserName);
+        params.put(Utils.STRING_USER_WIFI_SSID, mUserWifiSsid);
+        params.put(Utils.STRING_USER_PASSWORD, mUserPassword);
+
+        HttpClient.getClient().get(uri, params, new ResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    boolean loginFlag = (boolean)response.get("result");
+                    if(loginFlag) {
+                        System.out.println("Login succeeded...");
+
+                        SharedPreferences.Editor editor = getSharedPreferences(Utils.SHARED_PREFERENCES_NAME, MODE_PRIVATE).edit();
+                        editor.putInt(Utils.STRING_USER_SERIAL_NUM, DummyUtils.DUMMY_USER_SERIAL_NUM);
+                        editor.putString(Utils.STRING_USER_NAME, DummyUtils.DUMMY_USER_NAME);
+                        editor.putString(Utils.STRING_USER_WIFI_SSID, DummyUtils.DUMMY_USER_WIFI_SSID);
+                        editor.commit();
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        LoginActivity.this.startActivity(intent);
+                        LoginActivity.this.finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Login Failed. Please try again.", Toast.LENGTH_SHORT).show();
+                        clearInput();
                     }
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
