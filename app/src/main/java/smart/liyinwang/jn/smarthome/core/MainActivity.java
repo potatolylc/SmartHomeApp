@@ -16,6 +16,8 @@ import android.view.Menu;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -29,6 +31,10 @@ import smart.liyinwang.jn.smarthome.room.FragmentKitchen;
 import smart.liyinwang.jn.smarthome.room.FragmentLivingRoom;
 import smart.liyinwang.jn.smarthome.service.PushGeoLocationServiceImpl;
 import smart.liyinwang.jn.smarthome.service.PushWeatherServiceImpl;
+import smart.liyinwang.jn.smarthome.stomp.ListenerSubscription;
+import smart.liyinwang.jn.smarthome.stomp.ListenerWSNetwork;
+import smart.liyinwang.jn.smarthome.stomp.Stomp;
+import smart.liyinwang.jn.smarthome.stomp.Subscription;
 
 public class MainActivity extends ActionBarActivity implements MaterialTabListener {
 
@@ -117,14 +123,10 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
 
         // start geo location and weather push service
         // TODO: get options in shared preferences to enable or disable push service
-        geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
-        geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
-        MainActivity.this.startService(geoServiceIntent);
+        startPushService();
 
-        weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
-        weatherServiceIntent.setData(Uri.parse(URIRepository.PUSH_WEATHER_INFO));
-        MainActivity.this.startService(weatherServiceIntent);
-
+        // websocket subscribe
+        websocketSubscribe();
     }
 
     @Override
@@ -181,5 +183,33 @@ public class MainActivity extends ActionBarActivity implements MaterialTabListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void startPushService() {
+        geoServiceIntent = new Intent(MainActivity.this, PushGeoLocationServiceImpl.class);
+        geoServiceIntent.setData(Uri.parse(URIRepository.PUSH_GEO_INFO));
+        MainActivity.this.startService(geoServiceIntent);
+
+        weatherServiceIntent = new Intent(MainActivity.this, PushWeatherServiceImpl.class);
+        weatherServiceIntent.setData(Uri.parse(URIRepository.PUSH_WEATHER_INFO));
+        MainActivity.this.startService(weatherServiceIntent);
+
+    }
+
+    private void websocketSubscribe() {
+        Map<String, String> headers = new HashMap<String, String>();
+        Stomp stomp = new Stomp("ws://localhost:8888/MavenIoEData/socket", headers, new ListenerWSNetwork() {
+            @Override
+            public void onState(int state) {
+
+            }
+        });
+        stomp.connect();
+        stomp.subscribe(new Subscription("/queue/isNearHome", new ListenerSubscription() {
+            @Override
+            public void onMessage(Map<String, String> headers, String body) {
+                System.out.println("Got subscription!");
+            }
+        }));
     }
 }
