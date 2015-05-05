@@ -192,8 +192,8 @@ public class PushGeoLocationServiceImpl extends PushService {
                     NotificationCompat.Builder mBuilder = new NotificationCompat
                             .Builder(PushGeoLocationServiceImpl.this)
                                 .setSmallIcon(R.drawable.intro)
-                                .setContentTitle("Smart Home Notification")
-                                .setContentText("You are near home now");
+                                .setContentTitle("Near Home Notification")
+                                .setContentText("You're near home. Turn on the light?");
                     Intent resultIntent = new Intent(PushGeoLocationServiceImpl.this, MainActivity.class);
                     TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushGeoLocationServiceImpl.this);
                     stackBuilder.addParentStack(MainActivity.class);
