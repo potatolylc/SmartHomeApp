@@ -30,14 +30,6 @@
     <ImageButton
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/play_pause_button"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="130dp"
-        android:background="@mipmap/play_pause"/>
-
-    <ImageButton
-        android:layout_width="100dp"
-        android:layout_height="100dp"
         android:id="@+id/volume_minus_button"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="40dp"
@@ -54,7 +46,7 @@
     <ImageView
         android:layout_width="140dp"
         android:layout_height="140dp"
-        android:id="@+id/imageView"
+        android:id="@+id/living_room_air_con_image_view"
         android:layout_gravity="left|top"
         android:src="@mipmap/snowflake"
         android:layout_marginTop="50dp"
@@ -88,7 +80,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="living_room_air_conditioner_toggle_button"
-        android:id="@+id/toggleButton2"
+        android:id="@+id/living_room_air_conditioner_toggle_button"
         android:layout_gravity="center_horizontal|right|top"
         android:layout_marginTop="70dp"
         android:layout_marginRight="110dp"
@@ -96,5 +88,16 @@
         android:background="#4597BF"
         android:textColor="#ffffffff"
         android:checked="false"/>
+
+    <ToggleButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/play_pause_button"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="@mipmap/play_pause"
+        android:checked="false"
+        android:layout_marginBottom="130dp"
+        android:textOn=""
+        android:textOff=""/>
 
 </FrameLayout>

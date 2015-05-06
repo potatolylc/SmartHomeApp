@@ -35,7 +35,7 @@ public class FragmentEnvironment extends Fragment {
     private TextView mHumidityTextView;
 
     // main view
-    private View mMainView;
+    private View mView;
 
     // service and model object for loading data
     private EnvironmentService mEnvironmentService;
@@ -71,16 +71,16 @@ public class FragmentEnvironment extends Fragment {
 
     public void initImageView() {
         // init ImageView
-        mTempImageView = (ImageView) mMainView.findViewById(R.id.environment_temperature_imageView);
-        mBrightImageView = (ImageView) mMainView.findViewById(R.id.environment_brightness_imageView);
-        mHumidityImageView = (ImageView) mMainView.findViewById(R.id.environment_humidity_imageView);
+        mTempImageView = (ImageView) mView.findViewById(R.id.environment_temperature_imageView);
+        mBrightImageView = (ImageView) mView.findViewById(R.id.environment_brightness_imageView);
+        mHumidityImageView = (ImageView) mView.findViewById(R.id.environment_humidity_imageView);
     }
 
     public void initTextView() {
         // init textView
-        mTempTextView = (TextView) mMainView.findViewById(R.id.environment_temperature_textView);
-        mBrightTextView = (TextView) mMainView.findViewById(R.id.environment_brightness_textView);
-        mHumidityTextView = (TextView) mMainView.findViewById(R.id.environment_humidity_textView);
+        mTempTextView = (TextView) mView.findViewById(R.id.environment_temperature_textView);
+        mBrightTextView = (TextView) mView.findViewById(R.id.environment_brightness_textView);
+        mHumidityTextView = (TextView) mView.findViewById(R.id.environment_humidity_textView);
     }
 
     public void setEnvironmentTextView() {
@@ -113,21 +113,20 @@ public class FragmentEnvironment extends Fragment {
         Log.d("EnvironmentFragment log", "--> onCreateView()");
 
         // init main view
-        inflater = getActivity().getLayoutInflater();
-        mMainView = inflater.inflate(R.layout.fragment_environment, (ViewGroup) getActivity().findViewById(R.id.pager), false);
+        mView = inflater.inflate(R.layout.fragment_environment, container, false);
 
         // init view
         initImageView();
         initTextView();
 
         // Inflate the layout for this fragment
-        ViewGroup vp = (ViewGroup) mMainView.getParent();
+        ViewGroup vp = (ViewGroup) mView.getParent();
         if (vp != null) {
             vp.removeAllViewsInLayout();
             Log.d("EnvironmentFragment log", "--> All views removed");
         }
 
-        return mMainView;
+        return mView;
     }
 
     @Override

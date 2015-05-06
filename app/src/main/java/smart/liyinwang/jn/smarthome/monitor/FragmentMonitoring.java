@@ -98,7 +98,7 @@ public class FragmentMonitoring extends Fragment {
     private ValueShape mLlineShape = ValueShape.CIRCLE;
 
     // main view
-    private View mMainView;
+    private View mView;
 
     // service and list for loading data
     private MonitoringService mMonitoringService;
@@ -153,14 +153,8 @@ public class FragmentMonitoring extends Fragment {
         loadData();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.d("MonitoringFragment log", "--> onCreateView()");
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_monitoring, container, false);
-
-        mCLChartView = (ComboLineColumnChartView) view.findViewById(R.id.monitoring_temperature_chart);
+    private void initCLChartView() {
+        mCLChartView = (ComboLineColumnChartView) mView.findViewById(R.id.monitoring_temperature_chart);
         mCLChartView.setOnValueTouchListener(new ComboLineColumnChartOnValueSelectListener() {
             @Override
             public void onColumnValueSelected(int i, int i2, SubcolumnValue subcolumnValue) {
@@ -177,8 +171,10 @@ public class FragmentMonitoring extends Fragment {
 
             }
         });
+    }
 
-        mLineChartView = (LineChartView) view.findViewById(R.id.monitoring_light_brightness_chart);
+    private void initLineChartView() {
+        mLineChartView = (LineChartView) mView.findViewById(R.id.monitoring_light_brightness_chart);
         mLineChartView.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
             public void onValueSelected(int i, int i2, PointValue pointValue) {
@@ -190,8 +186,19 @@ public class FragmentMonitoring extends Fragment {
 
             }
         });
+    }
 
-        return view;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d("MonitoringFragment log", "--> onCreateView()");
+        // Inflate the layout for this fragment
+        mView = inflater.inflate(R.layout.fragment_monitoring, container, false);
+
+        initCLChartView();
+        initLineChartView();
+
+        return mView;
     }
 
 
