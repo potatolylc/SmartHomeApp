@@ -7,14 +7,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import org.apache.http.Header;
+
 import smart.liyinwang.jn.smarthome.R;
+import smart.liyinwang.jn.smarthome.http.HttpClient;
+import smart.liyinwang.jn.smarthome.http.ResponseHandler;
 
 
 /**
@@ -23,13 +27,18 @@ import smart.liyinwang.jn.smarthome.R;
  * and send event log data to server.
  */
 public class FragmentLivingRoom extends Fragment {
+    private static final int LOWEST_TEMPERATURE = 18;
+
     // components of air conditioner
     private ToggleButton mAirConToggleButton;
+    private Button mAirConStudyButton;
+    private ImageButton mAirConTempDownButton;
+    private ImageButton mAirConTempUpButton;
     private TextView mAirConTextView;
-    private SeekBar mAirConSeekBar;
 
     // components of television
     private ToggleButton mTVToggleButton;
+    private Button mTVStudyButton;
     private ImageButton mTVChannelUpButton;
     private ImageButton mTVChannelDownButton;
     private ImageButton mTVVolumeUpButton;
@@ -56,36 +65,57 @@ public class FragmentLivingRoom extends Fragment {
 
     }
 
+    private void initAirConViews() {
+        // init components of air conditioner
+        mAirConToggleButton = (ToggleButton)mView.findViewById(R.id.living_room_air_conditioner_toggle_button);
+        mAirConToggleButton.setTextOff("ON");
+        mAirConToggleButton.setTextOn("OFF");
+        mAirConStudyButton = (Button) mView.findViewById(R.id.living_room_air_con_study_button);
+        mAirConTempDownButton = (ImageButton) mView.findViewById(R.id.living_room_temperature_down_button);
+        mAirConTempUpButton = (ImageButton) mView.findViewById(R.id.living_room_temperature_up_button);
+        mAirConTextView = (TextView) mView.findViewById(R.id.living_room_temperature_text_view);
+    }
+
+    private void initTVViews() {
+        // init component of television
+        mTVToggleButton = (ToggleButton) mView.findViewById(R.id.play_pause_button);
+        mTVToggleButton.setTextOff(null);
+        mTVToggleButton.setTextOn(null);
+        mTVStudyButton = (Button) mView.findViewById(R.id.living_room_tv_study_button);
+        mTVChannelUpButton = (ImageButton) mView.findViewById(R.id.channel_plus_button);
+        mTVChannelDownButton = (ImageButton) mView.findViewById(R.id.channel_minus_button);
+        mTVVolumeUpButton = (ImageButton) mView.findViewById(R.id.volume_plus_button);
+        mTVVolumeDownButton = (ImageButton) mView.findViewById(R.id.volume_minus_button);
+    }
+
+    private void setEventTriggers() {
+        // event trigger - air conditioner
+        mAirConToggleButton.setOnCheckedChangeListener(new ToggleButtonClickListener());
+        mAirConStudyButton.setOnClickListener(new ButtonClickListener());
+        mAirConTempDownButton.setOnClickListener(new ImageButtonClickListener());
+        mAirConTempUpButton.setOnClickListener(new ImageButtonClickListener());
+
+        // event trigger - television
+        mTVToggleButton.setOnCheckedChangeListener(new ToggleButtonClickListener());
+        mTVStudyButton.setOnClickListener(new ButtonClickListener());
+        mTVChannelUpButton.setOnClickListener(new ImageButtonClickListener());
+        mTVChannelDownButton.setOnClickListener(new ImageButtonClickListener());
+        mTVVolumeUpButton.setOnClickListener(new ImageButtonClickListener());
+        mTVVolumeDownButton.setOnClickListener(new ImageButtonClickListener());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("LivingRoomFragment log", "--> new Instance()");
         mView = inflater.inflate(R.layout.fragment_living_room, container, false);
 
-        // init components of air conditioner
-        mAirConToggleButton = (ToggleButton)mView.findViewById(R.id.living_room_air_conditioner_toggle_button);
-        mAirConToggleButton.setTextOff("ON");
-        mAirConToggleButton.setTextOn("OFF");
-        mAirConTextView = (TextView) mView.findViewById(R.id.living_room_temperature_text_view);
-        mAirConSeekBar = (SeekBar) mView.findViewById(R.id.living_room_temperature_control_bar);
+        // init views
+        initAirConViews();
+        initTVViews();
 
-        // init component of television
-        mTVToggleButton = (ToggleButton) mView.findViewById(R.id.play_pause_button);
-        mTVToggleButton.setTextOff(null);
-        mTVToggleButton.setTextOn(null);
-        mTVChannelUpButton = (ImageButton) mView.findViewById(R.id.channel_plus_button);
-        mTVChannelDownButton = (ImageButton) mView.findViewById(R.id.channel_minus_button);
-        mTVVolumeUpButton = (ImageButton) mView.findViewById(R.id.volume_plus_button);
-        mTVVolumeDownButton = (ImageButton) mView.findViewById(R.id.volume_minus_button);
-
-        // event trigger
-        mAirConToggleButton.setOnCheckedChangeListener(new ToggleButtonClickListener());
-        mTVToggleButton.setOnCheckedChangeListener(new ToggleButtonClickListener());
-        mAirConSeekBar.setOnSeekBarChangeListener(new SeekBarChangeListener());
-        mTVChannelUpButton.setOnClickListener(new ImageButtonClickListener());
-        mTVChannelDownButton.setOnClickListener(new ImageButtonClickListener());
-        mTVVolumeUpButton.setOnClickListener(new ImageButtonClickListener());
-        mTVVolumeDownButton.setOnClickListener(new ImageButtonClickListener());
+        // event triggers
+        setEventTriggers();
 
         // Inflate the layout for this fragment
         return mView;
@@ -136,21 +166,71 @@ public class FragmentLivingRoom extends Fragment {
         }
     }
 
+    private void showToastMessage(String msg) {
+        Toast.makeText(FragmentLivingRoom.this.getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private class ButtonClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.living_room_air_con_study_button:
+                    showToastMessage("Air conditioner studying...");
+                    break;
+                case R.id.living_room_tv_study_button:
+                    showToastMessage("TV studying...");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     private class ToggleButtonClickListener implements CompoundButton.OnCheckedChangeListener {
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             switch (buttonView.getId()) {
                 case R.id.living_room_air_conditioner_toggle_button:
-                    Toast.makeText(FragmentLivingRoom.this.getActivity(),
-                            (isChecked ? "Air conditioner is on" : "Air conditioner is off"),
-                            Toast.LENGTH_SHORT).show();
-                    System.out.println(isChecked ? "Air conditioner is on" : "Air conditioner is off");
+                    if(isChecked) {
+                        HttpClient.getClient().get("http://192.168.1.16?/led=1", null, new ResponseHandler(){
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                System.out.println("turn OFF~~~");
+                            }
+                        });
+                    } else {
+                        HttpClient.getClient().get("http://192.168.1.16/?led=1", null, new ResponseHandler(){
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                System.out.println("turn ON~~~");
+                            }
+                        });
+                    }
+                    showToastMessage(isChecked ? "Air conditioner is on" : "Air conditioner is off");
                     break;
                 case R.id.play_pause_button:
-                    Toast.makeText(FragmentLivingRoom.this.getActivity(),
-                            (isChecked ? "TV is on" : "TV is off"),
-                            Toast.LENGTH_SHORT).show();
+                    if(isChecked) {
+                        HttpClient.getClient().get("http://192.168.1.16?/led=2", null, new ResponseHandler(){
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                System.out.println("turn OFF~~~");
+                            }
+                        });
+                    } else {
+                        HttpClient.getClient().get("http://192.168.1.16/?led=2", null, new ResponseHandler(){
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                System.out.println("turn ON~~~");
+                            }
+                        });
+                    }
+                    showToastMessage(isChecked ? "TV is on" : "TV is off");
                     break;
             }
         }
@@ -161,8 +241,23 @@ public class FragmentLivingRoom extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.living_room_temperature_down_button:
+                    showToastMessage("Air conditioner temperature down");
+                    break;
+                case R.id.living_room_temperature_up_button:
+                    showToastMessage("Air conditioner temperature up");
+                    break;
                 case R.id.channel_plus_button:
-                    System.out.println("channel plus!");
+                    showToastMessage("next TV channel");
+                    break;
+                case R.id.channel_minus_button:
+                    showToastMessage("previous TV channel");
+                    break;
+                case R.id.volume_plus_button:
+                    showToastMessage("TV volume up");
+                    break;
+                case R.id.volume_minus_button:
+                    showToastMessage("TV volume down");
                     break;
                 default:
                     break;
@@ -170,22 +265,6 @@ public class FragmentLivingRoom extends Fragment {
         }
     }
 
-    private class SeekBarChangeListener implements SeekBar.OnSeekBarChangeListener {
 
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
-    }
 
 }
