@@ -52,39 +52,26 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"/>
 
-    <SeekBar
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:id="@+id/living_room_temperature_control_bar"
-        android:layout_gravity="center|right|top"
-        android:layout_marginTop="130dp"
-        android:layout_marginRight="20dp"
-        android:max="13"
-        android:indeterminate="false"
-        android:progress="1"
-        android:progressTint="#4597BF"
-        android:thumbTint="#4597BF"/>
-
     <TextView
-        android:layout_width="100dp"
+        android:layout_width="92dp"
         android:layout_height="60dp"
-        android:text="25 ℃"
+        android:text="18 ℃"
         android:id="@+id/living_room_temperature_text_view"
         android:layout_gravity="right|top"
-        android:textSize="36dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="70dp"
-        android:textColor="#4597BF"/>
+        android:textSize="30dp"
+        android:layout_marginTop="130dp"
+        android:textColor="#4597BF"
+        android:layout_marginRight="60dp"/>
 
     <ToggleButton
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="living_room_air_conditioner_toggle_button"
+        android:text="ON"
         android:id="@+id/living_room_air_conditioner_toggle_button"
-        android:layout_gravity="center_horizontal|right|top"
+        android:layout_gravity="center_horizontal|right"
         android:layout_marginTop="70dp"
-        android:layout_marginRight="110dp"
-        android:textSize="25dp"
+        android:layout_marginRight="120dp"
+        android:textSize="20dp"
         android:background="#4597BF"
         android:textColor="#ffffffff"
         android:checked="false"/>
@@ -99,5 +86,47 @@
         android:layout_marginBottom="130dp"
         android:textOn=""
         android:textOff=""/>
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/living_room_temperature_down_button"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@mipmap/left_arrow"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/living_room_temperature_up_button"
+        android:layout_gravity="right|top"
+        android:layout_marginRight="30dp"
+        android:background="@mipmap/right_arrow"
+        android:layout_marginTop="130dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Study"
+        android:id="@+id/living_room_air_con_study_button"
+        android:layout_gravity="right|top"
+        android:layout_marginTop="70dp"
+        android:textSize="20dp"
+        android:textColor="#ffffffff"
+        android:background="#4597BF"
+        android:layout_marginRight="20dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Study"
+        android:id="@+id/living_room_tv_study_button"
+        android:layout_gravity="left|center_vertical"
+        android:textSize="20dp"
+        android:textColor="#ffffffff"
+        android:background="#4597BF"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="20dp"/>
 
 </FrameLayout>
